@@ -5,7 +5,6 @@ interface IKeyboardEventManagerProps {
 }
 
 export default function MonitorKeyboardEvents(props: IKeyboardEventManagerProps) {
-//export default function MonitorKeyboardEvents(onKeyPressed: (pressedKey: string) => void) {
     const [, setPressed] = React.useState([""])
     const onKeyPressedCallback = props.onKeyPressed;
 
@@ -15,7 +14,6 @@ export default function MonitorKeyboardEvents(props: IKeyboardEventManagerProps)
             setPressed(prevPressed => [...prevPressed, key]);
 
             onKeyPressedCallback(key);
-            //onKeyPressed(key);
         };
 
         const handleKeyUp = (event: KeyboardEvent) => {

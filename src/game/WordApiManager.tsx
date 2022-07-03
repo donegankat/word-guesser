@@ -1,4 +1,3 @@
-import React from 'react';
 import { TestWord_Deice } from './constants/TestWords';
 import IWord from './interfaces/IWord';
 

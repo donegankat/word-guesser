@@ -1,5 +1,5 @@
-import { KeyObject } from 'crypto';
 import * as React from 'react';
+import { Button } from 'react-bootstrap';
 import Board from './Board';
 import GameConstants from './constants/GameConstants';
 import { GameState } from './constants/GameState';
@@ -11,6 +11,7 @@ import MonitorKeyboardEvents from './KeyboardEventManager';
 import LoadWord from './WordApiManager';
 
 interface IGameProps {
+    isDebugMode: boolean;
 }
 
 interface IGameState {
@@ -21,7 +22,8 @@ interface IGameState {
 }
 
 /**
- * Manages the entire game, including the Board, Squares, and move history, and manages all actions and game states.
+ * Manages the entire game, including the Board, Squares, loading words and hints,
+ * and manages all actions and game states.
  */
 export class Game extends React.Component<IGameProps, IGameState> {
     constructor(props: IGameProps) {
@@ -38,27 +40,32 @@ export class Game extends React.Component<IGameProps, IGameState> {
         
         // This binding is necessary to make `this` work in the callback
         this.handleKeyPress = this.handleKeyPress.bind(this);
-        //this.handleWordLoaded = this.handleWordLoaded.bind(this);
     }
 
+    /**
+     * Handles when the component mounts.
+     */
     componentDidMount() {
         const winningWord = this.state.winningWord;
         if (winningWord === null || winningWord === undefined) {
-            LoadWord({
-                wordLength: GameConstants.MaxLetters,
-                isDebugMode: true
-            }).then(word => this.handleWordLoaded(word));
+            this.loadWinningWord();
         }
-
-        //KeyboardEventManager({ onKeyPress: this.handleKeyPress });
-
-        // ManageGameEvents({
-        //     onWordLoaded: this.handleWinningWordFetched,
-        //     onKeyPressed: this.handleKeyPress
-        // })
-
     }
 
+    /**
+     * Loads a new winning word.
+     */
+    loadWinningWord() {
+        LoadWord({
+            wordLength: GameConstants.MaxLetters,
+            isDebugMode: this.props.isDebugMode
+        }).then(word => this.handleWordLoaded(word));
+    }
+
+    /**
+     * Handles when a new winning word is loaded and builds the hints for the new word.
+     * @param word 
+     */
     handleWordLoaded(word: IWord) {
         this.setState({
             winningWord: word,
@@ -83,36 +90,11 @@ export class Game extends React.Component<IGameProps, IGameState> {
     }
 
     /**
-     * Handles when a square is clicked.
-     * @param {*} i
+     * Handles the event when a key is pressed.
+     * @param key 
+     * @returns 
      */
-    handleClick(guess: string) {
-        const history = this.state.history.slice(0, this.state.currentGuessIndex + 1);
-        const current = history[history.length - 1];
-
-
-        // Ignore the click if there's already a winner or the space is taken.
-        // if (
-        //   this.calculateGameStatus(guesses).gameStatus === GameState.Winner ||
-        //   guesses[i]
-        // ) {
-        //   return;
-        // }
-
-        // guesses[i] = guess;
-
-        // this.setState({
-        //   history: history.concat([
-        //     {
-        //       guesses: guesses,
-        //     },
-        //   ]),
-        //   guessNumber: history.length
-        // });
-    }
-
     handleKeyPress(key: string) {
-        // Only proceed if the game is still playable.
         if (!key) return;
 
         // Always lower-case to make for equal string comparisons.
@@ -123,11 +105,10 @@ export class Game extends React.Component<IGameProps, IGameState> {
         var currentGuess = history[currentGuessIndex];
         var currentLetterIndex = currentGuess?.letters?.length;
 
+        // Only proceed if the game is still playable.
         if (this.calculateGameStatus(currentGuess, currentGuessIndex) !== GameState.Playing) return;
-        //console.log("KEYPRESS", key, this)
 
         if (key === "enter") {
-
             // See if we're able to submit the current guess.
             if (currentGuess.letters.length === GameConstants.MaxLetters) {
                 // Evaluate the accuracy of the current guess and move on to the next guess.
@@ -157,7 +138,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
         } else if (key.length === 1) {
             var keyCode = key.charCodeAt(0);
 
-            // If the entered key was a valid letter guess and if the user isn't maxxed out
+            // If the entered key was a valid letter guess and if the user isn't maxed out
             // already on letters for the current guess, add the newly entered letter to the
             // guess.
             if (((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122)) && currentLetterIndex < GameConstants.MaxLetters) {
@@ -172,6 +153,31 @@ export class Game extends React.Component<IGameProps, IGameState> {
     }
 
     /**
+     * Resets the game and loads a new word to play.
+     * @param e
+     */
+    onClickResetGame(e: React.MouseEvent) {
+        // Force the focus back to the game board so that subsequent "Enter"s don't
+        // cause another reset.
+        var board = document.getElementsByClassName("game-board");
+        if (board && board[0] && board[0].firstElementChild)
+            (board[0] as HTMLElement).focus();
+
+        this.setState({
+            history: Array.from({ length: GameConstants.MaxGuesses }, () => ({
+                letters: [],
+                greenHighlightedSquares: [],
+                yellowHighlightedSquares: []
+            })),
+            currentGuessIndex: 0,
+            winningWord: undefined,
+            hints: undefined
+        });
+
+        this.loadWinningWord();
+    }
+
+    /**
      * Renders the Game.
      */
     render() {
@@ -179,30 +185,21 @@ export class Game extends React.Component<IGameProps, IGameState> {
         const currentGuessIndex = this.state.currentGuessIndex;
         const currentGuess = history[currentGuessIndex];
         const gameStatus = this.calculateGameStatus(currentGuess, currentGuessIndex);
+        const winningWord = this.state.winningWord;
         const hints = this.state.hints;
 
-        // Iterate over the entire move history and build a list of previous moves that the user can click to
-        // go back to.
-        //const moveHistory = this.buildMoveHistory(history, currentMove);
-
-        let status;
+        var status;
 
         if (gameStatus === GameState.Winner) {
             status = 'You won!';
         } else if (gameStatus === GameState.Loser) {
-            status = 'You lost';
-        } else {
-            //status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            status = `You lost. Answer: ${winningWord?.word}`;
         }
 
         return (
-            <div className="game">
+            <div id="game-container" className="game">
                 <MonitorKeyboardEvents onKeyPressed={this.handleKeyPress}></MonitorKeyboardEvents>
-                {/* <GameEventManager
-                    onKeyPressed={this.handleKeyPress}
-                    onWordLoaded={this.handleWordLoaded}
-                /> */}
-                <div className="game-board">
+                <div className="game-board" tabIndex={0}>
                     <Board
                         history={history}
                         maxGuesses={GameConstants.MaxGuesses}
@@ -212,16 +209,25 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 <div className="flex-row-break"></div>
                 <div className="game-info">
                     <div className="game-status">{status}</div>
-                    <Hints hints={hints} />
+                    <div className='game-actions'>
+                        <Hints hints={hints} />
+                        <Button onClick={this.onClickResetGame.bind(this)} tabIndex={0} type="reset" autoFocus={false}>Reset</Button>
+                    </div>
                 </div>
             </div>
         );
     }
     
+    /**
+     * Evaluates the accuracy of the current guess on submit, and colors the
+     * squares green or yellow as appropriate.
+     * @param guess 
+     * @returns 
+     */
     evaluateGuess(guess: IGuess): IGuess {
         if (!this.state.winningWord) return guess;
 
-        const winningWord = this.state.winningWord.word.split('');//["T", "H", "E", "E", "E"];
+        const winningWord = this.state.winningWord.word.split('');
 
         // Check each letter in order. This accounts for cases where the winning
         // word has duplicate letters.
@@ -294,23 +300,10 @@ export class Game extends React.Component<IGameProps, IGameState> {
     }
 
     /**
-     * Determines the current state of the game. If there's a winner, this returns the winning player and the
-     * list of Squares that resulted in the win. If all squares are filled but there's no winner, the state is
-     * a draw.
+     * Determines the current state of the game, whether the user has won or lost.
      * @param {*} squares
      */
     calculateGameStatus(currentGuess: IGuess, currentGuessIndex: number): number {
-        //var currentGuessIndex = this.state.currentGuessIndex;
-
-        // If the current guess index already equals or exceeds the max number of
-        // guesses, that means the user submitted their last guess and it still
-        // wasn't correct.
-        // if (currentGuessIndex >= Constants.MaxGuesses) {
-        //     return GameState.Loser;
-        // }
-
-        //var currentGuess = this.state.history[currentGuessIndex];
-
         if (currentGuessIndex >= GameConstants.MaxGuesses) {
             console.log("LOSE", currentGuess, currentGuessIndex);
             return GameState.Loser;

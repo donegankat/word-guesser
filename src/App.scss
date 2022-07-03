@@ -1,0 +1,127 @@
+$body-bg: #202327;
+$body-color: rgb(204, 204, 204);
+
+/* Import bootstrap to set changes */
+@import "~bootstrap/scss/bootstrap";
+
+body {
+    font: 14px "Century Gothic", Futura, sans-serif;
+    margin: 20px;
+    background-color: #202327;
+    color: rgb(204, 204, 204);
+  }
+  
+  ol, ul {
+    padding-left: 30px;
+  }
+  
+  .game-board {
+    height: min-content;
+    padding: 25px;
+    border: 5px outset;
+    border-radius: 5px;
+    background: rgb(46 49 56);
+  }
+  
+  .board-row:after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+  
+  .square {
+    background: #202327;
+    color: lightgray;
+    border: 1px solid #999;
+    float: left;
+    font-size: 38px;
+    font-weight: bold;
+    line-height: 50px;
+    height: 50px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 50px;
+    text-transform: uppercase;
+  }
+  
+  .square:focus {
+    outline: none;
+  }
+  
+  .kbd-navigation .square:focus {
+    background: #ddd;
+  }
+  
+  .square-highlighted-green {
+    background: #00851378;
+  }
+  
+  .square-highlighted-yellow {
+    background: #ffe0004f;
+  }
+  
+  .game {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .game-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .game-status {
+    font-size: large;
+    font-weight: bold;
+    height: 2rem;
+  }
+
+//   .game-actions {
+//       display: flex;
+//       justify-content: space-evenly;
+//   }
+
+//   .game-actions > button {
+//       display: flex;
+//   }
+
+.game-actions > button:first-child {
+    margin-right: 20px;
+}
+  
+  button {
+    padding: 3px 5px;
+    border-radius: 3px;
+    border-width: 1px;
+  }
+
+  .btn-reveal-hint {
+      padding: 0.2rem 0.3rem;
+      font-size: small;
+  }
+  
+  .current-move {
+    background: #bdbdbd;
+  }
+  
+  .flex-row-break {
+    flex-basis: 100%;
+    margin-top: 5px;
+  }
+
+  .offcanvas {
+    background: rgb(46 49 56);
+  }
+
+  .offcanvas-header {
+      background: #17191c;
+  }
+
+  .hint-value {
+      line-height: 40px;
+  }
