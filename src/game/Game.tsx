@@ -9,9 +9,12 @@ import IWord from './interfaces/IWord';
 import MonitorKeyboardEvents from './keyboard/KeyboardEventManager';
 import NewGame from './NewGame';
 import LoadWord from './data/WordApiManager';
+import { Firestore } from 'firebase/firestore';
 
 interface IGameProps {
     isDebugMode: boolean;
+    shouldLoadDebugFromRemote: boolean;
+    firestoreDb: Firestore;
 }
 
 interface IGameState {
@@ -60,8 +63,10 @@ export class Game extends React.Component<IGameProps, IGameState> {
      */
     loadWinningWord() {
         LoadWord({
+            firestoreDb: this.props.firestoreDb,
             wordLength: GameConstants.MaxLetters,
-            isDebugMode: this.props.isDebugMode
+            isDebugMode: this.props.isDebugMode,
+            shouldLoadDebugFromRemote: this.props.shouldLoadDebugFromRemote
         }).then(word => this.handleWordLoaded(word));
     }
 

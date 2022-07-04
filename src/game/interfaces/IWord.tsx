@@ -21,8 +21,8 @@ interface IWordSyllableDetails {
 
 export default interface IWord {
     word: string;
-    frequency?: number;
     results: IWordResultDetails[];
     syllables: IWordSyllableDetails;
+    frequency?: number;
     pronunciation?: {};
 }

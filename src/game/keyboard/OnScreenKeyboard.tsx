@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import { render } from "react-dom";
+import React from "react";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import "./OnScreenKeyboard.scss";
@@ -9,8 +8,7 @@ interface IOnScreenKeyboardManagerProps {
 }
 
 export default function OnScreenKeyboard(props: IOnScreenKeyboardManagerProps) {
-    const [input, setInput] = React.useState("");
-    const [layout, setLayout] = React.useState("default");
+    const [layout] = React.useState("default");
     const keyboard = React.useRef(null);
 
     const onKeyPress = (button: string) => {
@@ -32,7 +30,6 @@ export default function OnScreenKeyboard(props: IOnScreenKeyboardManagerProps) {
                         '← Z X C V B N M ENTER'
                     ]
                 }}
-                //onChange={setInput}
                 onKeyPress={onKeyPress}
                 theme={"hg-theme-default hg-layout-default on-screen-keyboard-theme"}
                 buttonTheme={[
