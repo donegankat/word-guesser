@@ -1,4 +1,5 @@
 import React from 'react';
+import OnScreenKeyboard from './OnScreenKeyboard';
 
 interface IKeyboardEventManagerProps {
     onKeyPressed: (pressedKey: string) => void;
@@ -31,6 +32,8 @@ export default function MonitorKeyboardEvents(props: IKeyboardEventManagerProps)
     }, [onKeyPressedCallback]);
 
     return (
-        <></>
+        <div className='on-screen-keyboard'>
+            <OnScreenKeyboard onKeyPressed={props.onKeyPressed}></OnScreenKeyboard>
+        </div>
     )
 }

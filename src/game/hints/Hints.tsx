@@ -3,6 +3,7 @@ import IHints from '../interfaces/IHints';
 import HintRevealer from './HintRevealer';
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { Button } from 'react-bootstrap';
+import "./Hints.scss";
 
 interface IHintsProps {
     hints?: IHints;
@@ -52,13 +53,6 @@ export default function Hints(props: IHintsProps) {
                     </div>
                 }
                 {
-                    props.hints.frequencyOfOccurrence &&
-                    <div className='hint-row'>
-                        <span className='hint-label'>Frequency of Word Occurrence:&nbsp;</span>
-                        <span className='hint-value'><HintRevealer value={props.hints.frequencyOfOccurrence.toFixed(2) + "%"}></HintRevealer></span>
-                    </div>
-                }
-                {
                     props.hints.definitions && props.hints.definitions[0].definition &&
                     <div className='hint-row'>
                         <span className='hint-label'>Definition:&nbsp;</span>
@@ -84,6 +78,13 @@ export default function Hints(props: IHintsProps) {
                     <div className='hint-row'>
                         <span className='hint-label'>Antonyms:&nbsp;</span>
                         <span className='hint-value'><HintRevealer value={props.hints.definitions[0].antonyms.join(", ")}></HintRevealer></span>
+                    </div>
+                }
+                {
+                    props.hints.frequencyOfOccurrence &&
+                    <div className='hint-row'>
+                        <span className='hint-label'>Frequency of Word Occurrence:&nbsp;</span>
+                        <span className='hint-value'><HintRevealer value={props.hints.frequencyOfOccurrence.toFixed(2) + "%"}></HintRevealer></span>
                     </div>
                 }
                 </Offcanvas.Body>

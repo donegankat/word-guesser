@@ -1,0 +1,41 @@
+.on-screen-keyboard-theme.simple-keyboard {
+    background-color: #202327;
+}
+
+.on-screen-keyboard-theme.react-simple-keyboard.simple-keyboard.hg-theme-default.hg-layout-default {
+    .btn-on-screen-keyboard {
+        width: 1.9rem;
+        height: 50px;
+    }
+
+    .btn-letter {
+        background: #2e3138;
+        border-bottom: 1px solid #000000;
+
+        &.hg-activeButton {
+            background: #202327;
+        }
+    }
+
+    .btn-enter {
+        font-size: 0.5rem;
+        background: #0b5ed7;
+        border-color: #0d6efd;
+
+        &.hg-activeButton {
+            background: #0a58ca;
+            border-color: #0a53be;
+        }
+    }
+    
+    .btn-backspace {
+        background: #6c757d;
+        border-color: #6c757d;
+
+        &.hg-activeButton {
+            background: #565e64;
+            border-color: #51585e;
+        }
+    }
+    
+}

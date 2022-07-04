@@ -1,0 +1,15 @@
+.offcanvas {
+  background: rgb(46 49 56);
+
+  .offcanvas-header {
+    background: #17191c;
+
+    .btn-close {
+      filter: invert(1);
+    }
+  }
+
+  .hint-value {
+    line-height: 40px;
+  }
+}

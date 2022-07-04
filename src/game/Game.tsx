@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Button } from 'react-bootstrap';
 import Board from './Board';
 import GameConstants from './constants/GameConstants';
 import { GameState } from './constants/GameState';
@@ -7,14 +6,16 @@ import Hints from './hints/Hints';
 import IGuess from './interfaces/IGuess';
 import IHints from './interfaces/IHints';
 import IWord from './interfaces/IWord';
-import MonitorKeyboardEvents from './KeyboardEventManager';
-import LoadWord from './WordApiManager';
+import MonitorKeyboardEvents from './keyboard/KeyboardEventManager';
+import NewGame from './NewGame';
+import LoadWord from './data/WordApiManager';
 
 interface IGameProps {
     isDebugMode: boolean;
 }
 
 interface IGameState {
+    gameState: number;
     history: IGuess[];
     currentGuessIndex: number;
     winningWord?: IWord;
@@ -30,6 +31,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
         super(props);
 
         this.state = {
+            gameState: GameState.Playing,
             history: Array.from({ length: GameConstants.MaxGuesses }, () => ({
                 letters: [],
                 greenHighlightedSquares: [],
@@ -40,6 +42,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
         
         // This binding is necessary to make `this` work in the callback
         this.handleKeyPress = this.handleKeyPress.bind(this);
+        this.onClickResetGame = this.onClickResetGame.bind(this);
     }
 
     /**
@@ -68,6 +71,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
      */
     handleWordLoaded(word: IWord) {
         this.setState({
+            gameState: GameState.Playing,
             winningWord: word,
             hints: {
                 definitions: word.results.map((res) => {
@@ -104,9 +108,10 @@ export class Game extends React.Component<IGameProps, IGameState> {
         var currentGuessIndex = this.state.currentGuessIndex;
         var currentGuess = history[currentGuessIndex];
         var currentLetterIndex = currentGuess?.letters?.length;
+        var currentGameState = this.state.gameState;
 
         // Only proceed if the game is still playable.
-        if (this.calculateGameStatus(currentGuess, currentGuessIndex) !== GameState.Playing) return;
+        if (currentGameState !== GameState.Playing) return;
 
         if (key === "enter") {
             // See if we're able to submit the current guess.
@@ -119,6 +124,10 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 });
 
                 var gameState = this.calculateGameStatus(history[currentGuessIndex], currentGuessIndex);
+
+                this.setState({
+                    gameState: gameState
+                });
 
                 // Only move on to the next guess if we have more guesses available and if
                 // the user hasn't won yet.
@@ -154,9 +163,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
 
     /**
      * Resets the game and loads a new word to play.
-     * @param e
      */
-    onClickResetGame(e: React.MouseEvent) {
+    onClickResetGame() {
         // Force the focus back to the game board so that subsequent "Enter"s don't
         // cause another reset.
         var board = document.getElementsByClassName("game-board");
@@ -164,6 +172,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
             (board[0] as HTMLElement).focus();
 
         this.setState({
+            gameState: GameState.Playing,
             history: Array.from({ length: GameConstants.MaxGuesses }, () => ({
                 letters: [],
                 greenHighlightedSquares: [],
@@ -182,9 +191,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
      */
     render() {
         const history = this.state.history;
-        const currentGuessIndex = this.state.currentGuessIndex;
-        const currentGuess = history[currentGuessIndex];
-        const gameStatus = this.calculateGameStatus(currentGuess, currentGuessIndex);
+        const gameStatus = this.state.gameState;
         const winningWord = this.state.winningWord;
         const hints = this.state.hints;
 
@@ -193,25 +200,27 @@ export class Game extends React.Component<IGameProps, IGameState> {
         if (gameStatus === GameState.Winner) {
             status = 'You won!';
         } else if (gameStatus === GameState.Loser) {
-            status = `You lost. Answer: ${winningWord?.word}`;
+            status = `You lost. Answer: ${winningWord?.word.toLocaleUpperCase()}`;
         }
 
         return (
-            <div id="game-container" className="game">
-                <MonitorKeyboardEvents onKeyPressed={this.handleKeyPress}></MonitorKeyboardEvents>
-                <div className="game-board" tabIndex={0}>
-                    <Board
-                        history={history}
-                        maxGuesses={GameConstants.MaxGuesses}
-                        maxLetters={GameConstants.MaxLetters}
-                    />
-                </div>
-                <div className="flex-row-break"></div>
-                <div className="game-info">
-                    <div className="game-status">{status}</div>
-                    <div className='game-actions'>
-                        <Hints hints={hints} />
-                        <Button onClick={this.onClickResetGame.bind(this)} tabIndex={0} type="reset" autoFocus={false}>Reset</Button>
+            <div className="game-wrapper">
+                <div id="game-container" className="game">
+                    <div className="game-board" tabIndex={0}>
+                        <Board
+                            history={history}
+                            maxGuesses={GameConstants.MaxGuesses}
+                            maxLetters={GameConstants.MaxLetters}
+                        />
+                    </div>
+                    <div className="flex-row-break"></div>
+                    <div className="game-controls">
+                        <div className="game-status">{status}</div>
+                        <MonitorKeyboardEvents onKeyPressed={this.handleKeyPress}></MonitorKeyboardEvents>
+                        <div className='game-actions'>
+                            <Hints hints={hints} />
+                            <NewGame onNewGameButtonClicked={this.onClickResetGame} currentGameState={gameStatus}></NewGame>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -270,8 +279,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 // there are 2 "E"s in "THERE" and therefore 1 other "E" is correct.
                 // We will not highlight the 2nd "E" because the winning word doesn't
                 // contain 3 "E"s.
-                for (var j = 0; j < allMatchingGuessLetters.length; j++) {
-                    var yellowMatchIndex = allMatchingGuessLetters[j];
+                for (var k = 0; k < allMatchingGuessLetters.length; k++) {
+                    var yellowMatchIndex = allMatchingGuessLetters[k];
 
                     // Skip any letters we've already highlighted green.
                     if (lettersToHighlightGreen.includes(yellowMatchIndex)) {
@@ -304,13 +313,13 @@ export class Game extends React.Component<IGameProps, IGameState> {
      * @param {*} squares
      */
     calculateGameStatus(currentGuess: IGuess, currentGuessIndex: number): number {
-        if (currentGuessIndex >= GameConstants.MaxGuesses) {
-            console.log("LOSE", currentGuess, currentGuessIndex);
-            return GameState.Loser;
-        } else if (currentGuess.greenHighlightedSquares?.length === GameConstants.MaxLetters) {
+        if (currentGuess.greenHighlightedSquares?.length === GameConstants.MaxLetters) {
             console.log("WIN", currentGuess, currentGuessIndex);
             return GameState.Winner;
-        } 
+        } else if (currentGuessIndex >= GameConstants.MaxGuesses - 1) {
+            console.log("LOSE", currentGuess, currentGuessIndex);
+            return GameState.Loser;
+        }
 
         return GameState.Playing;
     }
