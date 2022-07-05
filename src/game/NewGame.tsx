@@ -29,7 +29,7 @@ export default function NewGame(props: INewGameProps) {
 
     return (
         <>
-            <Button onClick={handleNewGameButtonClick} tabIndex={0} type="reset" autoFocus={false} variant="secondary">New Game</Button>
+            <Button onClick={handleNewGameButtonClick} tabIndex={0} type="reset" autoFocus={false} variant="outline-secondary">New Game</Button>
             <Modal show={show} onHide={handleClose} restoreFocus={false} centered={true}>
                 <Modal.Body>
                     Lose all progress on the current game and start over with a new word?

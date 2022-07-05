@@ -18,49 +18,54 @@ ul {
 
 .game-board {
   height: min-content;
-  padding: 25px;
-  border: 5px outset;
   border-radius: 5px;
   background: rgb(46 49 56);
 }
 
-.board-row:after {
-  clear: both;
-  content: "";
-  display: table;
+.board-row {    
+    display: flex;
+
+    &:after {
+        clear: both;
+        content: "";
+        display: table;
+    }
 }
 
 .square {
   background: #202327;
   color: lightgray;
   border: 1px solid #999;
-  float: left;
   font-size: 38px;
   font-weight: bold;
   line-height: 50px;
   height: 50px;
-  margin-right: -1px;
+  margin-right: 5px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
   width: 50px;
   text-transform: uppercase;
-}
 
-.square:focus {
-  outline: none;
+  &:last-child {
+      margin-right: 0;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &.square-highlighted-green {
+    background: #00851378;
+  }
+  
+  &.square-highlighted-yellow {
+    background: #ffe0004f;
+  }
 }
 
 .kbd-navigation .square:focus {
   background: #ddd;
-}
-
-.square-highlighted-green {
-  background: #00851378;
-}
-
-.square-highlighted-yellow {
-  background: #ffe0004f;
 }
 
 .game {
@@ -84,9 +89,12 @@ ul {
 
 .game-actions {
   margin-top: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 
-  > button:first-child {
-    margin-right: 20px;
+  > button {
+    display: flex;
   }
 }
 
@@ -94,11 +102,6 @@ button {
   padding: 3px 5px;
   border-radius: 3px;
   border-width: 1px;
-}
-
-.btn-reveal-hint {
-  padding: 0.2rem 0.3rem;
-  font-size: small;
 }
 
 .flex-row-break {

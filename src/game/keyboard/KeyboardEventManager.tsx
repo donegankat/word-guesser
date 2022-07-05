@@ -1,7 +1,9 @@
 import React from 'react';
+import ILetterHistory from '../interfaces/ILetterHistory';
 import OnScreenKeyboard from './OnScreenKeyboard';
 
 interface IKeyboardEventManagerProps {
+    guessedLetters: ILetterHistory;
     onKeyPressed: (pressedKey: string) => void;
 }
 
@@ -33,7 +35,10 @@ export default function MonitorKeyboardEvents(props: IKeyboardEventManagerProps)
 
     return (
         <div className='on-screen-keyboard'>
-            <OnScreenKeyboard onKeyPressed={props.onKeyPressed}></OnScreenKeyboard>
+            <OnScreenKeyboard
+                onKeyPressed={props.onKeyPressed}
+                guessedLetters={props.guessedLetters}
+            />
         </div>
     )
 }

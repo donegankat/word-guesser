@@ -13,7 +13,7 @@ const firestoreDb = getFirestore();
 
 function App() {
   return (
-    <Game firestoreDb={firestoreDb} isDebugMode={true} shouldLoadDebugFromRemote={true} />
+    <Game firestoreDb={firestoreDb} isDebugMode={false} shouldLoadDebugFromRemote={true} />
   );
 }
 

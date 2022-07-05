@@ -10,6 +10,7 @@ import MonitorKeyboardEvents from './keyboard/KeyboardEventManager';
 import NewGame from './NewGame';
 import LoadWord from './data/WordApiManager';
 import { Firestore } from 'firebase/firestore';
+import ILetterHistory from './interfaces/ILetterHistory';
 
 interface IGameProps {
     isDebugMode: boolean;
@@ -20,6 +21,7 @@ interface IGameProps {
 interface IGameState {
     gameState: number;
     history: IGuess[];
+    guessedLetters: ILetterHistory;
     currentGuessIndex: number;
     winningWord?: IWord;
     hints?: IHints;
@@ -40,6 +42,11 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 greenHighlightedSquares: [],
                 yellowHighlightedSquares: []
             })),
+            guessedLetters: {
+                correctLettersInCorrectLocation: [],
+                correctLettersInWrongLocation: [],
+                incorrectLetters: []
+            },
             currentGuessIndex: 0
         };
         
@@ -183,6 +190,11 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 greenHighlightedSquares: [],
                 yellowHighlightedSquares: []
             })),
+            guessedLetters: {
+                correctLettersInCorrectLocation: [],
+                correctLettersInWrongLocation: [],
+                incorrectLetters: []
+            },
             currentGuessIndex: 0,
             winningWord: undefined,
             hints: undefined
@@ -199,6 +211,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
         const gameStatus = this.state.gameState;
         const winningWord = this.state.winningWord;
         const hints = this.state.hints;
+        var guessedLetters = this.state.guessedLetters;
 
         var status;
 
@@ -221,10 +234,16 @@ export class Game extends React.Component<IGameProps, IGameState> {
                     <div className="flex-row-break"></div>
                     <div className="game-controls">
                         <div className="game-status">{status}</div>
-                        <MonitorKeyboardEvents onKeyPressed={this.handleKeyPress}></MonitorKeyboardEvents>
+                        <MonitorKeyboardEvents
+                            onKeyPressed={this.handleKeyPress}
+                            guessedLetters={guessedLetters}
+                        />
                         <div className='game-actions'>
+                            <NewGame
+                                onNewGameButtonClicked={this.onClickResetGame}
+                                currentGameState={gameStatus}
+                            />
                             <Hints hints={hints} />
-                            <NewGame onNewGameButtonClicked={this.onClickResetGame} currentGameState={gameStatus}></NewGame>
                         </div>
                     </div>
                 </div>
@@ -242,6 +261,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
         if (!this.state.winningWord) return guess;
 
         const winningWord = this.state.winningWord.word.split('');
+        const guessedLetters = this.state.guessedLetters;
 
         // Check each letter in order. This accounts for cases where the winning
         // word has duplicate letters.
@@ -250,6 +270,10 @@ export class Game extends React.Component<IGameProps, IGameState> {
             // match.
             if (guess.letters[i] === winningWord[i]) {
                 guess.greenHighlightedSquares.push(i);
+
+                // Track the letter itself so we can highlight it on the on-screen
+                // keyboard.
+                guessedLetters.correctLettersInCorrectLocation.push(guess.letters[i].toLocaleUpperCase());
             } else {
                 // Find all instances of the current letter in the winning word.
                 const allMatchingWinningLetters = winningWord.filter(letter => letter === winningWord[i]);
@@ -257,7 +281,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 // Now find all instances of the current letter in the guess.
                 var allMatchingGuessLetters: number[] = [];
                 var matchingGuessIterator = -1;
-                while((matchingGuessIterator = guess.letters.indexOf(winningWord[i], matchingGuessIterator + 1)) >= 0) {
+                while ((matchingGuessIterator = guess.letters.indexOf(winningWord[i], matchingGuessIterator + 1)) >= 0) {
                     allMatchingGuessLetters.push(matchingGuessIterator);
                 }
 
@@ -303,11 +327,42 @@ export class Game extends React.Component<IGameProps, IGameState> {
 
                     lettersToHighlightYellow.push(yellowMatchIndex);
                     highlightedLetterCount++;
+
+                    // Track the letter itself so we can highlight it on the on-screen
+                    // keyboard.
+                    guessedLetters.correctLettersInWrongLocation.push(guess.letters[yellowMatchIndex].toLocaleUpperCase());
                 }
 
                 guess.yellowHighlightedSquares.push(...lettersToHighlightYellow);
             }
         }
+
+        // Now that all letters have been evaluated for correctness, make 1 more
+        // pass to see which letters were totally incorrect.
+        for (var l = 0; l < guess.letters.length; l++) {
+            // Mark all letters that aren't correct at all as incorrect on the
+            // on-screen keyboard.
+            const guessedLetter = guess.letters[l].toLocaleUpperCase();
+            if (guessedLetters.correctLettersInCorrectLocation.indexOf(guessedLetter) === -1 && guessedLetters.correctLettersInWrongLocation.indexOf(guessedLetter) === -1) {
+                guessedLetters.incorrectLetters.push(guessedLetter);
+            }
+        }
+
+        // Correct letters in the correct location always trump the correct letters
+        // in the wrong location for on-screen keyboard highlighting, so if the user
+        // has found a green letter, never mark that letter as yellow again.
+        guessedLetters.correctLettersInWrongLocation = guessedLetters.correctLettersInWrongLocation.filter(function (letter) {
+            return guessedLetters.correctLettersInCorrectLocation.indexOf(letter) === -1;
+        });
+
+        this.setState({
+            guessedLetters: {
+                // Dedupe each list of letters.
+                correctLettersInCorrectLocation: Array.from(new Set(guessedLetters.correctLettersInCorrectLocation)),
+                correctLettersInWrongLocation: Array.from(new Set(guessedLetters.correctLettersInWrongLocation)),
+                incorrectLetters: Array.from(new Set(guessedLetters.incorrectLetters))
+            }
+        });
 
         console.log("EVALUATED", guess);
         return guess;

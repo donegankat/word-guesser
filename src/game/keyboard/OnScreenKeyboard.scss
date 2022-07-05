@@ -18,9 +18,9 @@
     }
 
     .btn-enter {
-        font-size: 0.5rem;
         background: #0b5ed7;
         border-color: #0d6efd;
+        height: 40px;
 
         &.hg-activeButton {
             background: #0a58ca;
@@ -31,6 +31,7 @@
     .btn-backspace {
         background: #6c757d;
         border-color: #6c757d;
+        height: 40px;
 
         &.hg-activeButton {
             background: #565e64;
@@ -38,4 +39,15 @@
         }
     }
     
+    .btn-correct-letter-correct-location {
+        background: #00851378;
+    }
+
+    .btn-correct-letter-wrong-location {
+        background: #ffe0004f;
+    }
+
+    .btn-incorrect-letter {
+        background: #212529;
+    }
 }
