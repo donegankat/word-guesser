@@ -12,6 +12,8 @@ import LoadWord from './data/WordApiManager';
 import { Firestore } from 'firebase/firestore';
 import ILetterHistory from './interfaces/ILetterHistory';
 
+import './Game.scss';
+
 interface IGameProps {
     isDebugMode: boolean;
     shouldLoadDebugFromRemote: boolean;
@@ -20,7 +22,7 @@ interface IGameProps {
 
 interface IGameState {
     gameState: number;
-    history: IGuess[];
+    guessHistory: IGuess[];
     guessedLetters: ILetterHistory;
     currentGuessIndex: number;
     winningWord?: IWord;
@@ -37,7 +39,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 
         this.state = {
             gameState: GameState.Playing,
-            history: Array.from({ length: GameConstants.MaxGuesses }, () => ({
+            guessHistory: Array.from({ length: GameConstants.MaxGuesses }, () => ({
                 letters: [],
                 greenHighlightedSquares: [],
                 yellowHighlightedSquares: []
@@ -49,7 +51,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
             },
             currentGuessIndex: 0
         };
-        
+
         // This binding is necessary to make `this` work in the callback
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.onClickResetGame = this.onClickResetGame.bind(this);
@@ -116,7 +118,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
         // Always lower-case to make for equal string comparisons.
         key = key.toLocaleLowerCase();
 
-        var history = this.state.history;
+        var history = this.state.guessHistory;
         var currentGuessIndex = this.state.currentGuessIndex;
         var currentGuess = history[currentGuessIndex];
         var currentLetterIndex = currentGuess?.letters?.length;
@@ -132,7 +134,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 history[currentGuessIndex] = this.evaluateGuess(currentGuess);
 
                 this.setState({
-                    history: history
+                    guessHistory: history
                 });
 
                 var gameState = this.calculateGameStatus(history[currentGuessIndex], currentGuessIndex);
@@ -154,7 +156,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
             history[currentGuessIndex] = currentGuess;
 
             this.setState({
-                history: history
+                guessHistory: history
             });
         } else if (key.length === 1) {
             var keyCode = key.charCodeAt(0);
@@ -167,7 +169,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 history[currentGuessIndex] = currentGuess;
 
                 this.setState({
-                    history: history
+                    guessHistory: history
                 });
             }
         }
@@ -185,7 +187,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 
         this.setState({
             gameState: GameState.Playing,
-            history: Array.from({ length: GameConstants.MaxGuesses }, () => ({
+            guessHistory: Array.from({ length: GameConstants.MaxGuesses }, () => ({
                 letters: [],
                 greenHighlightedSquares: [],
                 yellowHighlightedSquares: []
@@ -207,7 +209,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
      * Renders the Game.
      */
     render() {
-        const history = this.state.history;
+        const history = this.state.guessHistory;
         const gameStatus = this.state.gameState;
         const winningWord = this.state.winningWord;
         const hints = this.state.hints;
@@ -250,7 +252,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
             </div>
         );
     }
-    
+
     /**
      * Evaluates the accuracy of the current guess on submit, and colors the
      * squares green or yellow as appropriate.
