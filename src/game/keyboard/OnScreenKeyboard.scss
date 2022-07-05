@@ -1,3 +1,5 @@
+@import '../../index.scss';
+
 .on-screen-keyboard-theme.simple-keyboard {
     background-color: #202327;
 }
@@ -40,14 +42,14 @@
     }
     
     .btn-correct-letter-correct-location {
-        background: #00851378;
+        background: $color-correct;
     }
 
     .btn-correct-letter-wrong-location {
-        background: #ffe0004f;
+        background: $color-correct-wrong-location;
     }
 
     .btn-incorrect-letter {
-        background: #212529;
+        background: $color-incorrect;
     }
 }

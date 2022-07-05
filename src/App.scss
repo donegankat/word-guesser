@@ -3,12 +3,33 @@ $body-color: rgb(204, 204, 204);
 
 /* Import bootstrap to set changes */
 @import "~bootstrap/scss/bootstrap";
+@import 'bootstrap-icons/font/bootstrap-icons.css';
 
 body {
   font: 14px "Century Gothic", Futura, sans-serif;
   margin: 20px;
   background-color: #202327;
   color: rgb(204, 204, 204);
+}
+
+.navbar {
+  margin: -20px -20px 20px -20px;
+
+  &.navbar-dark.bg-dark {
+    background-color: #151618 !important;
+  }
+}
+
+.offcanvas {
+  background: rgb(46 49 56);
+
+  .offcanvas-header {
+    background: #17191c;
+
+    .btn-close {
+      filter: invert(1);
+    }
+  }
 }
 
 ol,

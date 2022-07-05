@@ -4,8 +4,10 @@ import HintRevealer from './HintRevealer';
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import { Button } from 'react-bootstrap';
 import "./Hints.scss";
+import LetterRevealer from './LetterRevealer';
 
 interface IHintsProps {
+    word?: string[];
     hints?: IHints;
 }
 
@@ -41,11 +43,18 @@ export default function Hints(props: IHintsProps) {
                 Show Hints
             </Button>
             {props.hints &&
-                <Offcanvas show={show} onHide={handleClose} placement="bottom" restoreFocus={false} {...props}>
+                <Offcanvas show={show} onHide={handleClose} placement="bottom" restoreFocus={false} {...props} className="offcanvas-hints h-50">
                     <Offcanvas.Header closeButton>
                         <Offcanvas.Title>Hints</Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
+                        {
+                            props.word &&
+                            <div className='hint-row hint-letters-row'>
+                                <span className='hint-label'>Reveal a Letter:&nbsp;</span>
+                                <span className='hint-value'><LetterRevealer letters={props.word}></LetterRevealer></span>
+                            </div>
+                        }
                         {
                             props.hints.syllableCount &&
                             <div className='hint-row'>

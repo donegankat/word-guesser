@@ -42,7 +42,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
             guessHistory: Array.from({ length: GameConstants.MaxGuesses }, () => ({
                 letters: [],
                 greenHighlightedSquares: [],
-                yellowHighlightedSquares: []
+                yellowHighlightedSquares: [],
+                isSubmitted: false
             })),
             guessedLetters: {
                 correctLettersInCorrectLocation: [],
@@ -91,7 +92,9 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 definitions: word.results.map((res) => {
                     return {
                         definition: res.definition,
-                        partOfSpeech: res.partOfSpeech
+                        partOfSpeech: res.partOfSpeech,
+                        synonyms: res.synonyms,
+                        antonyms: res.antonyms
                     }
                 }),
                 syllableCount: word.syllables.count,
@@ -190,7 +193,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
             guessHistory: Array.from({ length: GameConstants.MaxGuesses }, () => ({
                 letters: [],
                 greenHighlightedSquares: [],
-                yellowHighlightedSquares: []
+                yellowHighlightedSquares: [],
+                isSubmitted: false
             })),
             guessedLetters: {
                 correctLettersInCorrectLocation: [],
@@ -245,7 +249,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
                                 onNewGameButtonClicked={this.onClickResetGame}
                                 currentGameState={gameStatus}
                             />
-                            <Hints hints={hints} />
+                            <Hints word={winningWord?.word?.toLocaleUpperCase().split("")} hints={hints} />
                         </div>
                     </div>
                 </div>
@@ -261,6 +265,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
      */
     evaluateGuess(guess: IGuess): IGuess {
         if (!this.state.winningWord) return guess;
+
+        guess.isSubmitted = true;
 
         const winningWord = this.state.winningWord.word.split('');
         const guessedLetters = this.state.guessedLetters;

@@ -1,3 +1,5 @@
+@import '../index.scss';
+
 .game {
   display: flex;
   flex-direction: row;
@@ -45,11 +47,15 @@
   }
 
   &.square-highlighted-green {
-    background: #00851378;
+    background: $color-correct;
   }
 
   &.square-highlighted-yellow {
-    background: #ffe0004f;
+    background: $color-correct-wrong-location;
+  }
+
+  &.square-highlighted-incorrect {
+      background: $color-incorrect;
   }
 }
 
