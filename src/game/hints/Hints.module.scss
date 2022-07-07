@@ -1,0 +1,28 @@
+.offcanvasHints {
+  .hintValue {
+    line-height: 40px;
+  }
+}
+
+.btnRevealHint {
+  padding: 0.2rem 0.3rem;
+  font-size: small;
+}
+
+.hintRow.hintLettersRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  line-height: 40px;
+
+  .hintValue {
+    display: flex;
+    align-items: center;
+
+    .revealedLetter {
+      width: 65px;
+      text-align: center;
+      line-height: 27px;
+    }
+  }
+}

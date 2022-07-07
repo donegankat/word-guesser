@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { GameState } from './constants/GameState';
-import "./NewGame.scss";
 
 interface INewGameProps {
     currentGameState: number;

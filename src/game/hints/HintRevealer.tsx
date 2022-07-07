@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import styles from './Hints.module.scss';
+
 interface IHintRevealer {
     value: string | number;
 }
@@ -10,6 +12,6 @@ export default function HintRevealer(props: IHintRevealer) {
     return (isHintRevealed ?
         <span>{props.value}</span>
         :
-        <button className="btn btn-reveal-hint btn-light" onClick={() => {setIsHintRevealed(true)}}>Reveal</button>
+        <button className={`btn ${styles.btnRevealHint} btn-light`} onClick={() => {setIsHintRevealed(true)}}>Reveal</button>
     );
 }

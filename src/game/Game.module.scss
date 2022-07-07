@@ -1,0 +1,45 @@
+.game {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.gameBoard {
+  height: min-content;
+  border-radius: 5px;
+  background: rgb(46 49 56);
+}
+
+.boardRow {
+  display: flex;
+
+  &:after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+}
+
+.gameControls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .gameStatus {
+    font-size: large;
+    font-weight: bold;
+    height: 2rem;
+  }
+
+  .gameActions {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+
+    > button {
+      display: flex;
+    }
+  }
+}

@@ -2,6 +2,8 @@ import * as React from 'react';
 import IGuess from './interfaces/IGuess';
 import Square from './Square';
 
+import styles from './Board.module.scss';
+
 interface IBoardProps {
     history: IGuess[];
     maxGuesses: number;
@@ -38,7 +40,7 @@ export default class Board extends React.Component<IBoardProps> {
             }
 
             squareRows.push(
-                <div key={'board-row-' + guessRow} className="board-row">
+                <div key={'board-row-' + guessRow} className={styles.boardRow}>
                     {squares}
                 </div>
             );

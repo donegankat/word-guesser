@@ -1,0 +1,7 @@
+button.navbarToggler {    
+    &:focus,
+    &:active,
+    &:active:focus {
+        box-shadow: 0 0 0 0.05rem;
+    }
+}

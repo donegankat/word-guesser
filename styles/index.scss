@@ -1,0 +1,24 @@
+@import './variables.scss';
+
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+  background-color: #202327;
+  color: rgb(204, 204, 204);
+}
+
+ol,
+ul {
+  padding-left: 30px;
+}
+
+button {
+  padding: 3px 5px;
+  border-radius: 3px;
+  border-width: 1px;
+}
+
+.flex-row-break {
+  flex-basis: 100%;
+  margin-top: 5px;
+}

@@ -2,7 +2,6 @@ import React from "react";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 import ILetterHistory from "../interfaces/ILetterHistory";
-import "./OnScreenKeyboard.scss";
 
 interface IOnScreenKeyboardManagerProps {
     onKeyPressed: (pressedKey: string) => void;
@@ -22,7 +21,7 @@ export default function OnScreenKeyboard(props: IOnScreenKeyboardManagerProps) {
         props.onKeyPressed(button);
     };
 
-    const setLetterColors = (guessedLetters: ILetterHistory) => {
+    React.useEffect(() => {
         const baseLetterKeyClass = "hg-button hg-standardBtn btn-on-screen-keyboard btn-letter";
         const allLetters = document.querySelectorAll(".btn-on-screen-keyboard.btn-letter");
 
@@ -33,32 +32,31 @@ export default function OnScreenKeyboard(props: IOnScreenKeyboardManagerProps) {
 
         // Now set each keyboard letter to an appropriate color depending on its
         // correctness.
-        if (guessedLetters.correctLettersInCorrectLocation) {
-            for(var greenLetter of guessedLetters.correctLettersInCorrectLocation) {
+        if (props.guessedLetters.correctLettersInCorrectLocation) {
+            for (var greenLetter of props.guessedLetters.correctLettersInCorrectLocation) {
                 var greenLetterKey = document.querySelector(`.btn-on-screen-keyboard.btn-letter[data-skbtn="${greenLetter}"]`)
                 if (greenLetterKey)
                     greenLetterKey.className = `${baseLetterKeyClass} btn-correct-letter-correct-location`;
             }
         }
-    
-        if (guessedLetters.correctLettersInWrongLocation) {
-            for(var yellowLetter of guessedLetters.correctLettersInWrongLocation) {
+
+        if (props.guessedLetters.correctLettersInWrongLocation) {
+            for (var yellowLetter of props.guessedLetters.correctLettersInWrongLocation) {
                 var yellowLetterKey = document.querySelector(`.btn-on-screen-keyboard.btn-letter[data-skbtn="${yellowLetter}"]`)
                 if (yellowLetterKey)
                     yellowLetterKey.className = `${baseLetterKeyClass} btn-correct-letter-wrong-location`;
             }
         }
-    
-        if (guessedLetters.incorrectLetters) {
-            for(var incorrectLetter of guessedLetters.incorrectLetters) {
+
+        if (props.guessedLetters.incorrectLetters) {
+            for (var incorrectLetter of props.guessedLetters.incorrectLetters) {
                 var incorrectLetterKey = document.querySelector(`.btn-on-screen-keyboard.btn-letter[data-skbtn="${incorrectLetter}"]`)
                 if (incorrectLetterKey)
                     incorrectLetterKey.className = `${baseLetterKeyClass} btn-incorrect-letter`;
             }
         }
-    }
 
-    setLetterColors(props.guessedLetters);
+    }, [props.guessedLetters]);
 
     return (
         <div>

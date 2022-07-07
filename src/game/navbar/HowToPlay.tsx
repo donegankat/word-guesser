@@ -1,6 +1,8 @@
 import { Offcanvas } from "react-bootstrap";
 import Square from '../Square';
 
+import styles from '../Board.module.scss';
+
 interface IHowToPlayProps {
     show: boolean;
     onHide: () => void;
@@ -28,7 +30,7 @@ export default function HowToPlay(props: IHowToPlayProps) {
         }
 
         return (
-            <div className="board-row">
+            <div className={styles.boardRow}>
                 {squares}
             </div>
         )

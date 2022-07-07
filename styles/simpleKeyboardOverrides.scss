@@ -1,4 +1,4 @@
-@import '../../index.scss';
+@import './variables.scss';
 
 .on-screen-keyboard-theme.simple-keyboard {
     background-color: #202327;
@@ -7,7 +7,7 @@
 .on-screen-keyboard-theme.react-simple-keyboard.simple-keyboard.hg-theme-default.hg-layout-default {
     .btn-on-screen-keyboard {
         width: 1.9rem;
-        height: 50px;
+        height: 48px;
     }
 
     .btn-letter {

@@ -8,11 +8,10 @@ import IHints from './interfaces/IHints';
 import IWord from './interfaces/IWord';
 import MonitorKeyboardEvents from './keyboard/KeyboardEventManager';
 import NewGame from './NewGame';
-import LoadWord from './data/WordApiManager';
 import { Firestore } from 'firebase/firestore';
 import ILetterHistory from './interfaces/ILetterHistory';
 
-import './Game.scss';
+import styles from './Game.module.scss';
 
 interface IGameProps {
     isDebugMode: boolean;
@@ -72,12 +71,20 @@ export class Game extends React.Component<IGameProps, IGameState> {
      * Loads a new winning word.
      */
     loadWinningWord() {
-        LoadWord({
-            firestoreDb: this.props.firestoreDb,
+        const bodyData = {
             wordLength: GameConstants.MaxLetters,
             isDebugMode: this.props.isDebugMode,
             shouldLoadDebugFromRemote: this.props.shouldLoadDebugFromRemote
-        }).then(word => this.handleWordLoaded(word));
+        };
+
+        fetch('/api/wordsApi', {
+            method: "POST",
+            body: JSON.stringify(bodyData)
+        })
+        .then(response => response.json())
+        .then(jsonResponse => {
+            this.handleWordLoaded(jsonResponse);
+        });
     }
 
     /**
@@ -229,8 +236,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
 
         return (
             <div className="game-wrapper">
-                <div id="game-container" className="game">
-                    <div className="game-board" tabIndex={0}>
+                <div id="game-container" className={styles.game}>
+                    <div className={styles.gameBoard} tabIndex={0}>
                         <Board
                             history={history}
                             maxGuesses={GameConstants.MaxGuesses}
@@ -238,13 +245,13 @@ export class Game extends React.Component<IGameProps, IGameState> {
                         />
                     </div>
                     <div className="flex-row-break"></div>
-                    <div className="game-controls">
-                        <div className="game-status">{status}</div>
+                    <div className={styles.gameControls}>
+                        <div className={styles.gameStatus}>{status}</div>
                         <MonitorKeyboardEvents
                             onKeyPressed={this.handleKeyPress}
                             guessedLetters={guessedLetters}
                         />
-                        <div className='game-actions'>
+                        <div className={styles.gameActions}>
                             <NewGame
                                 onNewGameButtonClicked={this.onClickResetGame}
                                 currentGameState={gameStatus}

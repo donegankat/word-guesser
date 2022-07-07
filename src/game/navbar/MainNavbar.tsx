@@ -3,7 +3,7 @@ import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import HowToPlay from './HowToPlay';
 import Settings from './Settings';
 
-import './MainNavbar.scss';
+import styles from './MainNavbar.module.scss';
 
 export default function MainNavbar() {
     const [showHelpMenu, setHelpMenuShow] = React.useState(false);
@@ -22,12 +22,12 @@ export default function MainNavbar() {
                     <Navbar.Brand href="#">Word Guesser</Navbar.Brand>
                     <Nav className="flex-row justify-content-end flex-grow-1">
                         <Nav.Item aria-controls={'offcanvasNavbar-expand-how-to-play'}>
-                            <Button variant="outline-secondary" className="me-3 navbar-toggler navbar-toggle-how-to-play" onClick={handleHelpMenuShow}>
+                            <Button variant="outline-secondary" className={`me-3 ${styles.navbarToggler} navbar-toggle-how-to-play`} onClick={handleHelpMenuShow}>
                                 <i className="bi bi-question-circle"></i>
                             </Button>
                         </Nav.Item>
                         <Nav.Item aria-controls={'offcanvasNavbar-expand-settings'}>
-                            <Button variant="outline-secondary" className="me-0 navbar-toggler navbar-toggle-settings" onClick={handleSettingsMenuShow}>
+                            <Button variant="outline-secondary" className={`me-0 ${styles.navbarToggler} navbar-toggle-settings`} onClick={handleSettingsMenuShow}>
                                 <i className="bi bi-gear"></i>
                             </Button>
                         </Nav.Item>

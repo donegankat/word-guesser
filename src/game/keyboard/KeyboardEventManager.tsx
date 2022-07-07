@@ -28,7 +28,7 @@ export default function MonitorKeyboardEvents(props: IKeyboardEventManagerProps)
         document.addEventListener('keyup', handleKeyUp);
 
         return () => {
-        document.removeEventListener('keydown', handleKeyDown)
+            document.removeEventListener('keydown', handleKeyDown)
             document.removeEventListener('keyup', handleKeyUp)
         }
     }, [onKeyPressedCallback]);

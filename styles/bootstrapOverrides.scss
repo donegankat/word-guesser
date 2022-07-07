@@ -3,14 +3,7 @@ $body-color: rgb(204, 204, 204);
 
 /* Import bootstrap to set changes */
 @import "~bootstrap/scss/bootstrap";
-@import 'bootstrap-icons/font/bootstrap-icons.css';
-
-body {
-  font: 14px "Century Gothic", Futura, sans-serif;
-  margin: 20px;
-  background-color: #202327;
-  color: rgb(204, 204, 204);
-}
+@import "bootstrap-icons/font/bootstrap-icons.css";
 
 .navbar {
   margin: -20px -20px 20px -20px;
@@ -23,6 +16,10 @@ body {
 .offcanvas {
   background: rgb(46 49 56);
 
+  &.offcanvas-lg {
+    width: unset;
+  }
+
   .offcanvas-header {
     background: #17191c;
 
@@ -32,18 +29,10 @@ body {
   }
 }
 
-ol,
-ul {
-  padding-left: 30px;
-}
+.modal-content {
+  background: rgb(46 49 56);
 
-button {
-  padding: 3px 5px;
-  border-radius: 3px;
-  border-width: 1px;
-}
-
-.flex-row-break {
-  flex-basis: 100%;
-  margin-top: 5px;
+  .modal-footer {
+    border-top-color: #101214;
+  }
 }

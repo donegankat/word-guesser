@@ -1,0 +1,9 @@
+.boardRow {
+  display: flex;
+
+  &:after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+}

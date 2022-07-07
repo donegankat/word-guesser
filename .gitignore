@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 
+# Next.JS
+/.next/
+/out/
+
 # Firebase
 firebase-debug.log
 hosting.*.cache
