@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import App from '../pages/index';
+import App from './pages/index';
 
 test('renders "Reset" button', () => {
   render(<App />);

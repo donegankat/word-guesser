@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { TestWord_Deice } from '../../src/game/constants/TestWords';
-import IWord from '../../src/game/interfaces/IWord';
-import { wordsApiConfig } from '../../src/config/wordsApiConfig'
-import { SaveWordToDatabase, LoadRandomWordFromDatabase } from '../../src/data/WordDatabaseManager';
+import { TestWord_Deice } from '../../game/constants/TestWords';
+import IWord from '../../game/interfaces/IWord';
+import { wordsApiConfig } from '../../config/wordsApiConfig'
+import { SaveWordToDatabase, LoadRandomWordFromDatabase } from '../../data/WordDatabaseManager';
 import { Firestore, getFirestore } from 'firebase/firestore';
-import WriteLog from '../../src/data/RemoteLogManager';
+import WriteLog from '../../data/RemoteLogManager';
 
 interface IWordApiManagerProps {
     wordLength: number;

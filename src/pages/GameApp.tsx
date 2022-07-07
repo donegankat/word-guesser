@@ -1,9 +1,9 @@
-import { Game } from '../src/game/Game'
-import { firebaseConfig } from '../src/config/firebaseConfig';
+import { Game } from '../game/Game'
+import { firebaseConfig } from '../config/firebaseConfig';
 import { getFirestore } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
-import MainNavbar from '../src/game/navbar/MainNavbar';
+import MainNavbar from '../game/navbar/MainNavbar';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

@@ -1,5 +1,5 @@
 import type { AppProps } from 'next/app'
-import reportWebVitals from '../src/reportWebVitals';
+import reportWebVitals from '../reportWebVitals';
 
 import '../styles/bootstrapOverrides.scss';
 import '../styles/index.scss';
