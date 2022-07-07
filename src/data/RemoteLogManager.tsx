@@ -1,11 +1,9 @@
 import {
     doc,
     collection,
-    setDoc,
-    getFirestore
+    setDoc
 } from 'firebase/firestore';
-
-const firestoreDb = getFirestore();
+import { firestoreDb } from '../config/firebaseInit';
 
 export default async function WriteLog(message: any) {
     if (firestoreDb && message) {

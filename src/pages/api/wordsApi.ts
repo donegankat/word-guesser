@@ -1,10 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-
 import { TestWord_Deice } from '../../game/constants/TestWords';
 import IWord from '../../game/interfaces/IWord';
 import { wordsApiConfig } from '../../config/wordsApiConfig'
 import { SaveWordToDatabase, LoadRandomWordFromDatabase } from '../../data/WordDatabaseManager';
-import { Firestore, getFirestore } from 'firebase/firestore';
 import WriteLog from '../../data/RemoteLogManager';
 
 interface IWordApiManagerProps {
@@ -23,8 +21,6 @@ const requestHeaderOptions = {
     }
 };
 
-const firestoreDb = getFirestore();
-
 const handler = async(
   req: NextApiRequest,
   res: NextApiResponse<IWord>
@@ -41,7 +37,7 @@ const handler = async(
         if (props.shouldLoadDebugFromRemote) {
             // If the app is configured to do so, load a random word from the
             // DB of previously seen words.
-            winningWord = await LoadRandomWordFromDatabase(firestoreDb);
+            winningWord = await LoadRandomWordFromDatabase();
         } else {
             // Otherwise, load from the hardcoded test file.
             winningWord = TestWord_Deice;
@@ -77,7 +73,7 @@ const handler = async(
             });
 
         // Save the word to the DB for future use.
-        await SaveWordToDatabase(firestoreDb, winningWord);
+        await SaveWordToDatabase(winningWord);
     }
 
     res.status(200).json(winningWord);

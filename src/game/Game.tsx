@@ -10,13 +10,13 @@ import MonitorKeyboardEvents from './keyboard/KeyboardEventManager';
 import NewGame from './NewGame';
 import { Firestore } from 'firebase/firestore';
 import ILetterHistory from './interfaces/ILetterHistory';
+import { firestoreDb } from '../config/firebaseInit';
 
 import styles from './Game.module.scss';
 
 interface IGameProps {
     isDebugMode: boolean;
     shouldLoadDebugFromRemote: boolean;
-    firestoreDb: Firestore;
 }
 
 interface IGameState {

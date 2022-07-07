@@ -7,11 +7,11 @@ import {
     getDoc,
     getDocs
 } from 'firebase/firestore';
-import { Firestore } from 'firebase/firestore';
+import { firestoreDb } from '../config/firebaseInit';
 
-async function SaveWordToDatabase(firestoreDb: Firestore, word: IWord) {
+async function SaveWordToDatabase(word: IWord) {
     if (word) {
-        var doesDocExist = await CheckWordExistsInDatabase(firestoreDb, word);
+        var doesDocExist = await CheckWordExistsInDatabase(word);
 
         if (!doesDocExist) {
             console.log("DOC DOESN'T EXIST. ADDING", word);
@@ -26,7 +26,7 @@ async function SaveWordToDatabase(firestoreDb: Firestore, word: IWord) {
     }
 }
 
-async function CheckWordExistsInDatabase(firestoreDb: Firestore, word: IWord) {
+async function CheckWordExistsInDatabase(word: IWord) {
     var docRef = doc(firestoreDb, 'words', word.word);
     const docData = await getDoc(docRef);
 
@@ -37,7 +37,7 @@ async function CheckWordExistsInDatabase(firestoreDb: Firestore, word: IWord) {
     }
 }
 
-async function LoadRandomWordFromDatabase(firestoreDb: Firestore): Promise<IWord> {
+async function LoadRandomWordFromDatabase(): Promise<IWord> {
     const wordsQuery = query(
         collection(firestoreDb, "words")
     );
