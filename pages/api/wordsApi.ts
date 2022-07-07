@@ -17,7 +17,7 @@ const apiUrl = wordsApiConfig.baseUrl;
 const requestHeaderOptions = {
     method: 'GET',
     headers: {
-        'X-RapidAPI-Key': wordsApiConfig.apiKey,
+        'X-RapidAPI-Key': process.env.WORDS_API_KEY ?? "",
         'X-RapidAPI-Host': wordsApiConfig.host
     }
 };

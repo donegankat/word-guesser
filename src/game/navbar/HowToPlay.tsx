@@ -66,7 +66,7 @@ export default function HowToPlay(props: IHowToPlayProps) {
                         Hints are available to help whenever you need them. The available hints will vary by word.
                     </p>
                     <p>
-                        You can also load a new word and start over fresh by clicking "New Game".
+                        You can also load a new word and start over fresh by clicking &quot;New Game&quot;.
                     </p>
 
                     <hr/>
