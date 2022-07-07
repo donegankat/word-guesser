@@ -3,8 +3,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { TestWord_Deice } from '../../src/game/constants/TestWords';
 import IWord from '../../src/game/interfaces/IWord';
 import { wordsApiConfig } from '../../src/config/wordsApiConfig'
-import { SaveWordToDatabase, LoadRandomWordFromDatabase } from '../../src/game/data/WordDatabaseManager';
+import { SaveWordToDatabase, LoadRandomWordFromDatabase } from '../../src/data/WordDatabaseManager';
 import { Firestore, getFirestore } from 'firebase/firestore';
+import WriteLog from '../../src/data/RemoteLogManager';
 
 interface IWordApiManagerProps {
     wordLength: number;
@@ -31,11 +32,12 @@ const handler = async(
     const props: IWordApiManagerProps = JSON.parse(req.body);
     
     console.log("API", props, props.wordLength, props.isDebugMode);
+    WriteLog({message: "API", props: props, key: process.env.WORDS_API_KEY?.substring(0, 3)});
 
     var winningWord: IWord;
 
     // In debug mode, avoid making live API calls and running out my credit.
-    if (props.isDebugMode) {
+    if (props.isDebugMode || !process.env.WORDS_API_KEY) {
         if (props.shouldLoadDebugFromRemote) {
             // If the app is configured to do so, load a random word from the
             // DB of previously seen words.
@@ -70,6 +72,7 @@ const handler = async(
             })
             .catch(err => {
                 console.error(err);
+                WriteLog(err);
                 throw err;
             });
 

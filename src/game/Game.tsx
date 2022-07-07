@@ -82,8 +82,11 @@ export class Game extends React.Component<IGameProps, IGameState> {
             body: JSON.stringify(bodyData)
         })
         .then(response => response.json())
-        .then(jsonResponse => {
+        .then((jsonResponse: IWord) => {
             this.handleWordLoaded(jsonResponse);
+        })
+        .catch(err => {
+            console.error("FAILED TO LOAD WORD", err);
         });
     }
 

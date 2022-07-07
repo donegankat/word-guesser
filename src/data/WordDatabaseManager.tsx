@@ -1,4 +1,4 @@
-import IWord from '../interfaces/IWord';
+import IWord from '../game/interfaces/IWord';
 import {
     doc,
     collection,
