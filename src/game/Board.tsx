@@ -14,7 +14,7 @@ interface IBoardProps {
  * Creates the board which contains the squares which represent the letters
  * for each guess.
  */
-export default class Board extends React.Component<IBoardProps> {
+ export default class Board extends React.Component<IBoardProps> {
     renderSquare(guessIndex: number, letterIndex: number) {
         const currentGuess = this.props.history[guessIndex];
         return (

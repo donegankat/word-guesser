@@ -8,15 +8,12 @@ import IHints from './interfaces/IHints';
 import IWord from './interfaces/IWord';
 import MonitorKeyboardEvents from './keyboard/KeyboardEventManager';
 import NewGame from './NewGame';
-import { Firestore } from 'firebase/firestore';
 import ILetterHistory from './interfaces/ILetterHistory';
-import { firestoreDb } from '../config/firebaseInit';
 
 import styles from './Game.module.scss';
 
 interface IGameProps {
-    isDebugMode: boolean;
-    shouldLoadDebugFromRemote: boolean;
+    winningWord: IWord;
 }
 
 interface IGameState {
@@ -36,7 +33,33 @@ export class Game extends React.Component<IGameProps, IGameState> {
     constructor(props: IGameProps) {
         super(props);
 
-        this.state = {
+        this.state = this.resetGameState(props.winningWord);
+
+        // This binding is necessary to make `this` work in the callback
+        this.handleKeyPress = this.handleKeyPress.bind(this);
+        this.onClickResetGame = this.onClickResetGame.bind(this);
+    }
+
+    /**
+     * Handles when the component props update.
+     * If a new winning word prop is passed to this component, this resets the game
+     * state and all data.
+     */
+    componentDidUpdate(prevProps: IGameProps) {
+        // If we were passed a new winning word, reset the entire game state.
+        if (prevProps.winningWord !== this.props.winningWord) {
+            this.setState(this.resetGameState(this.props.winningWord));
+        }
+    }
+
+    /**
+     * Returns a fresh game state with all properties reset.
+     * Used on initial game load and on each reset.
+     * @param winningWord 
+     * @returns 
+     */
+     resetGameState(winningWord: IWord): IGameState {
+        return {
             gameState: GameState.Playing,
             guessHistory: Array.from({ length: GameConstants.MaxGuesses }, () => ({
                 letters: [],
@@ -49,75 +72,35 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 correctLettersInWrongLocation: [],
                 incorrectLetters: []
             },
-            currentGuessIndex: 0
+            currentGuessIndex: 0,
+            winningWord: winningWord,
+            hints: this.loadHints(winningWord)
         };
-
-        // This binding is necessary to make `this` work in the callback
-        this.handleKeyPress = this.handleKeyPress.bind(this);
-        this.onClickResetGame = this.onClickResetGame.bind(this);
     }
 
     /**
-     * Handles when the component mounts.
+     * 
+     * @param winningWord Handles when a new winning word is loaded and builds the hints for the new word.
+     * @returns 
      */
-    componentDidMount() {
-        const winningWord = this.state.winningWord;
-        if (winningWord === null || winningWord === undefined) {
-            this.loadWinningWord();
-        }
-    }
+    loadHints(winningWord: IWord): IHints {
+        return {
+            definitions: winningWord.results.map((res) => {
+                return {
+                    definition: res.definition,
+                    partOfSpeech: res.partOfSpeech,
+                    synonyms: res.synonyms,
+                    antonyms: res.antonyms
+                }
+            }),
+            syllableCount: winningWord.syllables.count,
 
-    /**
-     * Loads a new winning word.
-     */
-    loadWinningWord() {
-        const bodyData = {
-            wordLength: GameConstants.MaxLetters,
-            isDebugMode: this.props.isDebugMode,
-            shouldLoadDebugFromRemote: this.props.shouldLoadDebugFromRemote
+            // According to the Words API documentation, the frequency ranges from
+            // approx. 1-7, so we should scale that from 1% to 100%.
+            // https://www.wordsapi.com/docs/#frequency
+            // https://stackoverflow.com/a/11107254
+            frequencyOfOccurrence: winningWord.frequency ? ((winningWord.frequency - 1) / 6) * 100 : undefined
         };
-
-        fetch('/api/wordsApi', {
-            method: "POST",
-            body: JSON.stringify(bodyData)
-        })
-        .then(response => response.json())
-        .then((jsonResponse: IWord) => {
-            this.handleWordLoaded(jsonResponse);
-        })
-        .catch(err => {
-            console.error("FAILED TO LOAD WORD", err);
-        });
-    }
-
-    /**
-     * Handles when a new winning word is loaded and builds the hints for the new word.
-     * @param word 
-     */
-    handleWordLoaded(word: IWord) {
-        this.setState({
-            gameState: GameState.Playing,
-            winningWord: word,
-            hints: {
-                definitions: word.results.map((res) => {
-                    return {
-                        definition: res.definition,
-                        partOfSpeech: res.partOfSpeech,
-                        synonyms: res.synonyms,
-                        antonyms: res.antonyms
-                    }
-                }),
-                syllableCount: word.syllables.count,
-
-                // According to the Words API documentation, the frequency ranges from
-                // approx. 1-7, so we should scale that from 1% to 100%.
-                // https://www.wordsapi.com/docs/#frequency
-                // https://stackoverflow.com/a/11107254
-                frequencyOfOccurrence: word.frequency ? ((word.frequency - 1) / 6) * 100 : undefined
-            }
-        });
-
-        console.log("WORD FETCHED", word, this.state);
     }
 
     /**
@@ -189,34 +172,14 @@ export class Game extends React.Component<IGameProps, IGameState> {
     }
 
     /**
-     * Resets the game and loads a new word to play.
+     * Callback to handle the event when the user resets the game.
      */
     onClickResetGame() {
         // Force the focus back to the game board so that subsequent "Enter"s don't
         // cause another reset.
-        var board = document.getElementsByClassName("game-board");
+        var board = document.getElementsByClassName("game-container");
         if (board && board[0] && board[0].firstElementChild)
             (board[0] as HTMLElement).focus();
-
-        this.setState({
-            gameState: GameState.Playing,
-            guessHistory: Array.from({ length: GameConstants.MaxGuesses }, () => ({
-                letters: [],
-                greenHighlightedSquares: [],
-                yellowHighlightedSquares: [],
-                isSubmitted: false
-            })),
-            guessedLetters: {
-                correctLettersInCorrectLocation: [],
-                correctLettersInWrongLocation: [],
-                incorrectLetters: []
-            },
-            currentGuessIndex: 0,
-            winningWord: undefined,
-            hints: undefined
-        });
-
-        this.loadWinningWord();
     }
 
     /**
