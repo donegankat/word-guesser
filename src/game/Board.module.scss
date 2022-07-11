@@ -1,7 +1,8 @@
 .boardRow {
 	display: flex;
 	margin-bottom: 1px;
-	height: 4em;
+	height: 7vmax;
+    max-height: 4rem;
 
 	&:after {
 		clear: both;
