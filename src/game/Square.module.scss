@@ -10,11 +10,11 @@
 	margin-top: -1px;
 	padding: 0;
 	text-align: center;
-	width: 100%;
 	text-transform: uppercase;
 	perspective: 1000px;
 	transform-style: preserve-3d;
 	transition: transform 0.8s, background-color 0.8s;
+  aspect-ratio: 1 / 1;
 
 	&:last-child {
 		margin-right: 0;

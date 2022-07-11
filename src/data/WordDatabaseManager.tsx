@@ -5,10 +5,14 @@ import {
     query,
     setDoc,
     getDoc,
-    getDocs
+    getDocs,
+    where,
+    serverTimestamp,
+    updateDoc
 } from 'firebase/firestore';
 import { firestoreDb } from '../config/firebaseInit';
 import WriteLog from './RemoteLogManager';
+import GameConstants from '../game/constants/GameConstants';
 
 async function SaveWordToDatabase(word: IWord) {
     if (word) {
@@ -23,7 +27,8 @@ async function SaveWordToDatabase(word: IWord) {
             const wordsCollectionRef = collection(firestoreDb, "words");
             setDoc(doc(wordsCollectionRef, word.word), {
                 word: word,
-                firstSeenTimestamp: Date.now()
+                length: word.word.length,
+                firstSeenTimestamp: serverTimestamp()
             });
         } else {
             WriteLog("WordDatabaseManager.SaveWordToDatabase", {
@@ -36,7 +41,7 @@ async function SaveWordToDatabase(word: IWord) {
 
 async function CheckWordExistsInDatabase(word: string) {
     if (!word || word.length <= 0) return false;
-    
+
     var docRef = doc(firestoreDb, 'words', word);
     const docData = await getDoc(docRef);
 
@@ -49,11 +54,16 @@ async function CheckWordExistsInDatabase(word: string) {
 
 async function LoadRandomWordFromDatabase(): Promise<IWord> {
     const wordsQuery = query(
-        collection(firestoreDb, "words")
+        collection(firestoreDb, "words"),
+        where("length", "==", GameConstants.MaxLetters)
     );
 
     const querySnapshot = await getDocs(wordsQuery);
     const docsLength = querySnapshot.docs.length;
+
+    if (docsLength === 0)
+        throw `Failed to retrieve a random word from the database with the requested length of ${GameConstants.MaxLetters}`;
+    
     const randomDocIndex = getRandomDocIndex(0, docsLength);
 
     var docArray: IWord[] = [];
@@ -71,4 +81,23 @@ function getRandomDocIndex(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
 
-export { SaveWordToDatabase, LoadRandomWordFromDatabase, CheckWordExistsInDatabase };
+/**
+ * Helper function used when all docs need to be updated for some reason.
+ * Not intended for normal app use.
+ */
+async function BulkUpdateDocuments() {
+    const querySnapshot = await getDocs(collection(firestoreDb, "words"));
+
+    querySnapshot.forEach((doc) => {
+        //if (doc.data().word.word[0] === "a") {
+            console.log("UPDATING", doc.data())
+            
+            updateDoc(doc.ref, {
+                firstSeenTimestamp: serverTimestamp(),
+                length: doc.data().word.word.length
+              });
+        //}
+    });
+}
+
+export { SaveWordToDatabase, LoadRandomWordFromDatabase, CheckWordExistsInDatabase, BulkUpdateDocuments };

@@ -1,7 +1,8 @@
 import {
     doc,
     collection,
-    setDoc
+    setDoc,
+    serverTimestamp
 } from 'firebase/firestore';
 import { firestoreDb } from '../config/firebaseInit';
 
@@ -11,7 +12,7 @@ export default async function WriteLog(caller: string, message: any) {
         setDoc(doc(logsCollectionRef), {
             caller: caller,
             logMessage: message,
-            timestamp: Date.now()
+            timestamp: serverTimestamp()// Timestamp.now()
         });
     }
 }

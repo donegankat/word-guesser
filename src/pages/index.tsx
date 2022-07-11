@@ -2,6 +2,7 @@ import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import WriteLog from "../data/RemoteLogManager";
 import {
+  BulkUpdateDocuments,
 	LoadRandomWordFromDatabase,
 	SaveWordToDatabase
 } from "../data/WordDatabaseManager";
@@ -50,9 +51,8 @@ export async function getServerSideProps() {
 
 	WriteLog("index.getServerSideProps", {
 		isDebugMode: isDebugMode,
-		shouldLoadDebugFromRemote: shouldLoadDebugFromRemote,
-		key: process.env.WORDS_API_KEY?.substring(0, 3)
-	});
+    shouldLoadDebugFromRemote: shouldLoadDebugFromRemote
+  });
 
 	var winningWord: IWord;
 
@@ -61,7 +61,14 @@ export async function getServerSideProps() {
 		if (shouldLoadDebugFromRemote) {
 			// If the app is configured to do so, load a random word from the
 			// DB of previously seen words.
-			winningWord = await LoadRandomWordFromDatabase();
+      try {
+        winningWord = await LoadRandomWordFromDatabase();
+      } catch (err) {
+        WriteLog("index.getServerSideProps", {
+          err: err
+        });
+        throw err;
+      }
 		} else {
 			// Otherwise, load from the hardcoded test file.
 			winningWord = TestWord_Deice;
