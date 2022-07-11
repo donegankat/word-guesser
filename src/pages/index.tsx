@@ -37,7 +37,7 @@ function Index({
 }
 
 export async function getServerSideProps() {
-  const isDebugMode = false;//process.env.IS_DEBUG_MODE;
+	const isDebugMode = process.env.IS_DEBUG_MODE;
 	const shouldLoadDebugFromRemote = process.env.LOAD_DEBUG_FROM_REMOTE_DB;
 
 	const requestHeaderOptions = {
@@ -48,8 +48,7 @@ export async function getServerSideProps() {
 		}
 	};
 
-	WriteLog({
-		message: "GETSERVERSIDEPROPS",
+	WriteLog("index.getServerSideProps", {
 		isDebugMode: isDebugMode,
 		shouldLoadDebugFromRemote: shouldLoadDebugFromRemote,
 		key: process.env.WORDS_API_KEY?.substring(0, 3)
@@ -85,7 +84,10 @@ export async function getServerSideProps() {
 
 		const queryString = encodedQueryKeyValuePairs.join("&");
 
-		winningWord = await fetch(`${process.env.WORDS_API_BASE_URL}?${queryString}`, requestHeaderOptions)
+		winningWord = await fetch(
+			`${process.env.WORDS_API_BASE_URL}?${queryString}`,
+			requestHeaderOptions
+		)
 			.then((response) => response.json())
 			.then((jsonResponse: IWord) => {
 				// The word should already come back lower-cased, but lower-case it again
@@ -96,7 +98,10 @@ export async function getServerSideProps() {
 			})
 			.catch((err) => {
 				console.error("FAILED TO LOAD WORD", err);
-				WriteLog(err);
+				WriteLog("index.getServerSideProps", {
+					message: "Failed to load word",
+					error: err
+				});
 				throw err;
 			});
 

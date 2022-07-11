@@ -16,13 +16,13 @@ export default function Square(props: ISquareProps) {
 	var className = styles.square;
 
 	if (props.isCorrectLetterInCorrectLocation) {
-		className += ` ${styles.squareHighlightedCorrect}`;
+		className += ` ${styles.squareHighlighted} ${styles.squareHighlightedCorrect}`;
 	} else if (props.isCorrectLetterInWrongLocation) {
-		className += ` ${styles.squareHighlightedCorrectLetterWrongLocation}`;
+		className += ` ${styles.squareHighlighted} ${styles.squareHighlightedCorrectLetterWrongLocation}`;
 	} else if (props.isSubmitted) {
 		// If the word has been submitted and is neither correct or correct
 		// in the wrong location, highlight it as incorrect.
-		className += ` ${styles.squareHighlightedIncorrect}`;
+		className += ` ${styles.squareHighlighted} ${styles.squareHighlightedIncorrect}`;
 	}
 
 	return <span className={className}>{props.value}</span>;

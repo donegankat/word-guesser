@@ -44,10 +44,15 @@ export default class Board extends React.Component<IBoardProps> {
 			for (let guessLetter = 0; guessLetter < this.props.maxLetters; guessLetter++
 			) {
 				squares.push(this.renderSquare(guessRow, guessLetter));
-			}
+            }
+            
+            var className = styles.boardRow;
+            if (this.props.history[guessRow].isInvalidGuess) {
+                className = `${className} ${styles.invalidGuess}`;
+            }
 
 			squareRows.push(
-				<div key={`board-row-${guessRow}`} className={styles.boardRow}>
+				<div key={`board-row-${guessRow}`} className={className}>
 					{squares}
 				</div>
 			);

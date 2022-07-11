@@ -128,32 +128,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 		if (key === "enter") {
 			// See if we're able to submit the current guess.
 			if (currentGuess.letters.length === GameConstants.MaxLetters) {
-				// Evaluate the accuracy of the current guess and move on to the next guess.
-				history[currentGuessIndex] = this.evaluateGuess(currentGuess);
-
-				this.setState({
-					guessHistory: history
-				});
-
-				var gameState = this.calculateGameStatus(
-					history[currentGuessIndex],
-					currentGuessIndex
-				);
-
-				this.setState({
-					gameState: gameState
-				});
-
-				// Only move on to the next guess if we have more guesses available and if
-				// the user hasn't won yet.
-				var nextGuessIndex =
-					gameState === GameState.Playing
-						? currentGuessIndex + 1
-						: currentGuessIndex;
-
-				this.setState({
-					currentGuessIndex: nextGuessIndex
-				});
+                this.submitGuess();
 			}
 		} else if (key === "backspace") {
 			// Delete a letter from the current guess.
@@ -249,13 +224,75 @@ export class Game extends React.Component<IGameProps, IGameState> {
 		);
 	}
 
+    /**
+     * Attempts to submit a guess. If the guess is a valid word, this increments the guess
+     * history and updates the guessed words/letters.
+     * If the guess is not a valid word, this communicates to the user that their guess was
+     * invalid.
+     * @returns 
+     */
+    async submitGuess() {
+        var history = this.state.guessHistory;
+		var currentGuessIndex = this.state.currentGuessIndex;
+		var currentGuess = history[currentGuessIndex];
+        
+        const isValidGuess: boolean = await this.checkGuessValidity(currentGuess.letters.join(""));
+        if (!isValidGuess) {
+            currentGuess.isInvalidGuess = true;
+            history[currentGuessIndex] = currentGuess;
+            
+            this.setState({
+                guessHistory: history
+            });
+
+            // Once we've alerted the user that their guess was invalid, remove the
+            // CSS class that causes the row to stand out.
+            setTimeout(() => {
+                currentGuess.isInvalidGuess = false;
+                history[currentGuessIndex] = currentGuess;
+
+                this.setState({
+                    guessHistory: history
+                });
+            }, 500);
+            return;
+        }
+
+        // Evaluate the accuracy of the current guess and move on to the next guess.
+        history[currentGuessIndex] = this.evaluateGuessLetterAccuracy(currentGuess);
+
+        this.setState({
+            guessHistory: history
+        });
+
+        var gameState = this.calculateGameStatus(
+            history[currentGuessIndex],
+            currentGuessIndex
+        );
+
+        this.setState({
+            gameState: gameState
+        });
+
+        // Only move on to the next guess if we have more guesses available and if
+        // the user hasn't won yet.
+        var nextGuessIndex =
+            gameState === GameState.Playing
+                ? currentGuessIndex + 1
+                : currentGuessIndex;
+
+        this.setState({
+            currentGuessIndex: nextGuessIndex
+        });
+    }
+
 	/**
 	 * Evaluates the accuracy of the current guess on submit, and colors the
 	 * squares green or yellow as appropriate.
 	 * @param guess
 	 * @returns
 	 */
-	evaluateGuess(guess: IGuess): IGuess {
+	evaluateGuessLetterAccuracy(guess: IGuess): IGuess {
 		if (!this.state.winningWord) return guess;
 
 		guess.isSubmitted = true;
@@ -385,9 +422,30 @@ export class Game extends React.Component<IGameProps, IGameState> {
 			}
 		});
 
-		console.log("EVALUATED", guess);
 		return guess;
-	}
+    }
+    
+    async checkGuessValidity(wordToCheck: string) {
+        const bodyData = {
+            wordToCheck: wordToCheck
+        };
+
+        const isValidGuess = await fetch('/api/checkGuessValidity', {
+            method: "POST",
+            body: JSON.stringify(bodyData)
+        })
+        .then(response => response.json())
+        .then((jsonResponse: { isValidGuess: boolean }) => {
+            console.log(jsonResponse);
+            return jsonResponse.isValidGuess;
+        })
+        .catch(err => {
+            console.error("FAILED TO CHECK VALIDITY", wordToCheck, err);
+            throw err;
+        });
+
+        return isValidGuess;
+    }
 
 	/**
 	 * Determines the current state of the game, whether the user has won or lost.
