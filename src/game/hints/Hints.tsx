@@ -41,7 +41,7 @@ export default function Hints(props: IHintsProps) {
                 Show Hints
             </Button>
             {props.hints &&
-                <Offcanvas show={show} onHide={handleClose} placement="bottom" restoreFocus={false} {...props} className={`${styles.offcanvasHints} h-50`}>
+                <Offcanvas show={show} onHide={handleClose} placement="bottom" restoreFocus={false} className={`${styles.offcanvasHints} h-50`}>
                     <Offcanvas.Header closeButton>
                         <Offcanvas.Title>Hints</Offcanvas.Title>
                     </Offcanvas.Header>

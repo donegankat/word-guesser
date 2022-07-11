@@ -37,7 +37,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 
 		// This binding is necessary to make `this` work in the callback
 		this.handleKeyPress = this.handleKeyPress.bind(this);
-		this.handleButtonFocus = this.handleButtonFocus.bind(this);
+		this.setFocusOnGameBoard = this.setFocusOnGameBoard.bind(this);
 	}
 
 	/**
@@ -187,17 +187,17 @@ export class Game extends React.Component<IGameProps, IGameState> {
 	 * Callback to handle the event when the user clicks a button that needs to have its focus
      * handled after the click.
 	 */
-	handleButtonFocus() {
+	setFocusOnGameBoard() {
 		// Force the focus back to the game board so that subsequent "Enter"s don't cause
 		// another click on the button. Having the "Enter" key re-click the button could
         // cause annoying behavior like a game reset or showing the hints again.
-		var board = document.getElementById("game-container");
+        var board = document.getElementById("game-container");
 		if (board && board.firstElementChild && board.firstElementChild.firstElementChild)
 			(board.firstElementChild.firstElementChild as HTMLElement).focus();
 	}
 
 	/**
-	 * Renders the Game.
+	 * Renders the game.
 	 */
 	render() {
 		const history = this.state.guessHistory;
@@ -234,12 +234,13 @@ export class Game extends React.Component<IGameProps, IGameState> {
 						<div className={styles.gameActions}>
 							<NewGame
 								currentGameState={gameStatus}
-								onNewGameButtonClicked={this.handleButtonFocus}
+                                onNewGameButtonClicked={this.setFocusOnGameBoard}
+                                onConfirmationModalClose={this.setFocusOnGameBoard}
 							/>
 							<Hints
 								word={winningWord?.word?.toLocaleUpperCase().split("")}
                                 hints={hints}
-                                onShowHideHints={this.handleButtonFocus}
+                                onShowHideHints={this.setFocusOnGameBoard}
 							/>
 						</div>
 					</div>
