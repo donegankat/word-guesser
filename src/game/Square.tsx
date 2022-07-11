@@ -1,10 +1,10 @@
-import styles from './Square.module.scss';
+import styles from "./Square.module.scss";
 
 interface ISquareProps {
-  isHighlightedGreen: boolean;
-  isHighlightedYellow: boolean;
-  isSubmitted: boolean;
-  value: string;
+	isCorrectLetterInCorrectLocation: boolean;
+	isCorrectLetterInWrongLocation: boolean;
+	isSubmitted: boolean;
+	value: string;
 }
 
 /**
@@ -13,21 +13,17 @@ interface ISquareProps {
  * @param {*} props
  */
 export default function Square(props: ISquareProps) {
-  var className = styles.square;
+	var className = styles.square;
 
-  if (props.isHighlightedGreen) {
-    className += ' ' + styles.squareHighlightedCorrect;
-  } else if (props.isHighlightedYellow) {
-    className += ' ' + styles.squareHighlightedCorrectLetterWrongLocation;
-  } else if (props.isSubmitted) {
-    // If the word has been submitted and is neither correct or correct
-    // in the wrong location, highlight it as incorrect.
-    className += ' ' + styles.squareHighlightedIncorrect;
-  }
+	if (props.isCorrectLetterInCorrectLocation) {
+		className += ` ${styles.squareHighlightedCorrect}`;
+	} else if (props.isCorrectLetterInWrongLocation) {
+		className += ` ${styles.squareHighlightedCorrectLetterWrongLocation}`;
+	} else if (props.isSubmitted) {
+		// If the word has been submitted and is neither correct or correct
+		// in the wrong location, highlight it as incorrect.
+		className += ` ${styles.squareHighlightedIncorrect}`;
+	}
 
-  return (
-    <span className={className}>
-      {props.value}
-    </span>
-  );
+	return <span className={className}>{props.value}</span>;
 }

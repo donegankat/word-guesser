@@ -10,6 +10,7 @@ import styles from './Hints.module.scss';
 interface IHintsProps {
     word?: string[];
     hints?: IHints;
+    onShowHideHints: () => void;
 }
 
 /**
@@ -23,9 +24,7 @@ export default function Hints(props: IHintsProps) {
 
         // Force the DOM to lose focus on the hint button so that typing "Enter"
         // submits the current guess.
-        if (document.activeElement?.parentElement?.parentElement) {
-            document.activeElement.parentElement.parentElement.focus();
-        }
+        props.onShowHideHints();
     }
 
     const handleShow = () => {
@@ -33,9 +32,7 @@ export default function Hints(props: IHintsProps) {
 
         // Force the DOM to lose focus on the hint button so that typing "Enter"
         // submits the current guess.
-        if (document.activeElement?.parentElement?.parentElement) {
-            document.activeElement.parentElement.parentElement.focus();
-        }
+        props.onShowHideHints();
     }
 
     return (

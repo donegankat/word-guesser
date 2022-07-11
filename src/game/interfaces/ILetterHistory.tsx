@@ -1,5 +1,5 @@
 export default interface ILetterHistory {
-    correctLettersInCorrectLocation: string[];
-    correctLettersInWrongLocation: string[];
-    incorrectLetters: string[];
+	correctLettersCorrectLocation: string[];
+	correctLettersWrongLocation: string[];
+	incorrectLetters: string[];
 }
