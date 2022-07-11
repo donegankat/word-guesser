@@ -8,7 +8,8 @@
 .gameBoard {
   height: min-content;
   border-radius: 5px;
-  background: rgb(46 49 56);
+  flex-grow: 1;
+  max-width: 300px;
 }
 
 .boardRow {
