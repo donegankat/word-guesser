@@ -3,7 +3,8 @@ import styles from "./Square.module.scss";
 interface ISquareProps {
 	isCorrectLetterInCorrectLocation: boolean;
 	isCorrectLetterInWrongLocation: boolean;
-	isSubmitted: boolean;
+  isSubmitted: boolean;
+  isInvalidGuess?: boolean;
 	value: string;
 }
 
@@ -13,9 +14,11 @@ interface ISquareProps {
  * @param {*} props
  */
 export default function Square(props: ISquareProps) {
-	var className = styles.square;
+  var className = styles.square;
 
-	if (props.isCorrectLetterInCorrectLocation) {
+  if (props.isInvalidGuess) {
+    className += ` ${styles.invalidSubmittedGuess}`;
+  } else if (props.isCorrectLetterInCorrectLocation) {
 		className += ` ${styles.squareHighlighted} ${styles.squareHighlightedCorrect}`;
 	} else if (props.isCorrectLetterInWrongLocation) {
 		className += ` ${styles.squareHighlighted} ${styles.squareHighlightedCorrectLetterWrongLocation}`;

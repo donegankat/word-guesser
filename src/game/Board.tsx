@@ -29,7 +29,8 @@ export default class Board extends React.Component<IBoardProps> {
 					currentGuess.yellowHighlightedSquares !== undefined &&
 					currentGuess.yellowHighlightedSquares.indexOf(letterIndex) > -1
 				}
-				isSubmitted={currentGuess.isSubmitted}
+                isSubmitted={currentGuess.isSubmitted}
+                isInvalidGuess={currentGuess.isInvalidGuess}
 			/>
 		);
 	}

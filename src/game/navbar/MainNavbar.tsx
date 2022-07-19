@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
-import HowToPlay from './HowToPlay';
-import Settings from './Settings';
+import HowToPlay from './HowToPlayMenu';
+import Settings from './SettingsMenu';
 
 import styles from './MainNavbar.module.scss';
 

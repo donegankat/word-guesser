@@ -29,6 +29,15 @@
     font-size: large;
     font-weight: bold;
     height: 2rem;
+
+    .gameStatusShown {
+      animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
   }
 
   .gameActions {

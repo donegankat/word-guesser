@@ -176,18 +176,26 @@ export class Game extends React.Component<IGameProps, IGameState> {
 	 */
 	render() {
 		const history = this.state.guessHistory;
+		const currentGuessIndex = this.state.currentGuessIndex;
+		const currentGuess = history[currentGuessIndex];
 		const gameStatus = this.state.gameState;
 		const winningWord = this.state.winningWord;
 		const hints = this.state.hints;
 		var guessedLetters = this.state.guessedLetters;
 
-		var status;
+        var status;
+        var statusClassName = "";
 
 		if (gameStatus === GameState.Winner) {
 			status = "You won!";
+            statusClassName = styles.gameStatusShown;
 		} else if (gameStatus === GameState.Loser) {
 			status = `You lost. Answer: ${winningWord?.word.toLocaleUpperCase()}`;
-		}
+            statusClassName = styles.gameStatusShown;
+        } else if (currentGuess.isInvalidGuess) {
+            status = "Invalid guess";
+            statusClassName = styles.gameStatusShown;
+        }
 
 		return (
 			<div className="game-wrapper">
@@ -201,7 +209,9 @@ export class Game extends React.Component<IGameProps, IGameState> {
 					</div>
 					<div className="flex-row-break"></div>
 					<div className={styles.gameControls}>
-						<div className={styles.gameStatus}>{status}</div>
+                        <div className={styles.gameStatus}>
+                            <span className={statusClassName}>{status}</span>
+                        </div>
 						<MonitorKeyboardEvents
 							onKeyPressed={this.handleKeyPress}
 							guessedLetters={guessedLetters}
@@ -254,7 +264,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
                 this.setState({
                     guessHistory: history
                 });
-            }, 500);
+            }, 1000);
             return;
         }
 
