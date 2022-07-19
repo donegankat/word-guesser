@@ -39,15 +39,4 @@
       100% { opacity: 1; }
     }
   }
-
-  .gameActions {
-    margin-top: 10px;
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
-
-    > button {
-      display: flex;
-    }
-  }
 }

@@ -82,11 +82,11 @@ export default function OnScreenKeyboard(props: IOnScreenKeyboardManagerProps) {
 				theme={"hg-theme-default hg-layout-default on-screen-keyboard-theme"}
 				buttonTheme={[
 					{
-						class: "btn-on-screen-keyboard btn-enter",
+						class: "btn btn-on-screen-keyboard btn-keyboard-main-action btn-primary btn-enter",
 						buttons: "SUBMIT"
-					},
+                    },
 					{
-						class: "btn-on-screen-keyboard btn-backspace",
+						class: "btn btn-on-screen-keyboard btn-keyboard-main-action btn-secondary btn-backspace",
 						buttons: backspaceChar
 					},
 					{

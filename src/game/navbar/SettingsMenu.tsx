@@ -1,14 +1,16 @@
 import { Offcanvas } from "react-bootstrap";
 
 interface ISettingsProps {
-    show: boolean;
+    isShown: boolean;
+    onShow: () => void;
     onHide: () => void;
 }
 
 export default function Settings(props: ISettingsProps) {
     return (
         <Offcanvas
-            show={props.show}
+            show={props.isShown}
+            onShow={props.onShow}
             onHide={props.onHide}
             id={'offcanvasNavbar-expand-settings'}
             aria-labelledby={'offcanvasNavbarLabel-expand-settings'}

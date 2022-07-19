@@ -2,13 +2,12 @@ import * as React from "react";
 import Board from "./Board";
 import GameConstants from "./constants/GameConstants";
 import { GameState } from "./constants/GameState";
-import Hints from "./hints/Hints";
 import IGuess from "./interfaces/IGuess";
 import IHints from "./interfaces/IHints";
 import IWord from "./interfaces/IWord";
 import MonitorKeyboardEvents from "./keyboard/KeyboardEventManager";
-import NewGame from "./NewGame";
 import ILetterHistory from "./interfaces/ILetterHistory";
+import MainNavbar from "./navbar/MainNavbar";
 
 import styles from "./Game.module.scss";
 
@@ -17,6 +16,7 @@ interface IGameProps {
 }
 
 interface IGameState {
+    canSubmit: boolean;
 	gameState: number;
 	guessHistory: IGuess[];
 	guessedLetters: ILetterHistory;
@@ -37,6 +37,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 
 		// This binding is necessary to make `this` work in the callback
 		this.handleKeyPress = this.handleKeyPress.bind(this);
+		this.loseFocusOnGameBoard = this.loseFocusOnGameBoard.bind(this);
 		this.setFocusOnGameBoard = this.setFocusOnGameBoard.bind(this);
 	}
 
@@ -59,7 +60,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
 	 * @returns
 	 */
 	resetGameState(winningWord: IWord): IGameState {
-		return {
+        return {
+            canSubmit: true,
 			gameState: GameState.Playing,
 			guessHistory: Array.from({ length: GameConstants.MaxGuesses }, () => ({
 				letters: [],
@@ -116,6 +118,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 		// Always lower-case to make for equal string comparisons.
 		key = key.toLocaleLowerCase();
 
+        var canSubmit = this.state.canSubmit;
 		var history = this.state.guessHistory;
 		var currentGuessIndex = this.state.currentGuessIndex;
 		var currentGuess = history[currentGuessIndex];
@@ -127,7 +130,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 
 		if (key === "enter") {
 			// See if we're able to submit the current guess.
-			if (currentGuess.letters.length === GameConstants.MaxLetters) {
+			if (canSubmit && currentGuess.letters.length === GameConstants.MaxLetters) {
                 this.submitGuess();
 			}
 		} else if (key === "backspace") {
@@ -168,8 +171,22 @@ export class Game extends React.Component<IGameProps, IGameState> {
         // cause annoying behavior like a game reset or showing the hints again.
         var board = document.getElementById("game-container");
 		if (board && board.firstElementChild && board.firstElementChild.firstElementChild)
-			(board.firstElementChild.firstElementChild as HTMLElement).focus();
-	}
+            (board.firstElementChild.firstElementChild as HTMLElement).focus();
+        
+        this.setState({
+            canSubmit: true
+        });
+    }
+
+    /**
+     * Callback to handle when the user clicks a button that needs to force focus off of the game
+     * board so as to avoid accidental submits.
+     */
+    loseFocusOnGameBoard() {
+        this.setState({
+            canSubmit: false
+        });
+    }
 
 	/**
 	 * Renders the game.
@@ -197,40 +214,37 @@ export class Game extends React.Component<IGameProps, IGameState> {
             statusClassName = styles.gameStatusShown;
         }
 
-		return (
-			<div className="game-wrapper">
-				<div id="game-container" className={styles.game}>
-					<div className={styles.gameBoard} tabIndex={0}>
-						<Board
-							history={history}
-							maxGuesses={GameConstants.MaxGuesses}
-							maxLetters={GameConstants.MaxLetters}
-						/>
-					</div>
-					<div className="flex-row-break"></div>
-					<div className={styles.gameControls}>
-                        <div className={styles.gameStatus}>
-                            <span className={statusClassName}>{status}</span>
+        return (
+            <>
+                <MainNavbar
+                    word={winningWord?.word?.toLocaleUpperCase().split("")}
+                    hints={hints}
+                    currentGameState={gameStatus}
+                    loseFocusOnGameBoard={this.loseFocusOnGameBoard}
+                    setFocusOnGameBoard={this.setFocusOnGameBoard}
+                ></MainNavbar>
+                <div className="game-wrapper">
+                    <div id="game-container" className={styles.game}>
+                        <div className={styles.gameBoard} tabIndex={0}>
+                            <Board
+                                history={history}
+                                maxGuesses={GameConstants.MaxGuesses}
+                                maxLetters={GameConstants.MaxLetters}
+                            />
                         </div>
-						<MonitorKeyboardEvents
-							onKeyPressed={this.handleKeyPress}
-							guessedLetters={guessedLetters}
-						/>
-						<div className={styles.gameActions}>
-							<NewGame
-								currentGameState={gameStatus}
-                                onNewGameButtonClicked={this.setFocusOnGameBoard}
-                                onConfirmationModalClose={this.setFocusOnGameBoard}
-							/>
-							<Hints
-								word={winningWord?.word?.toLocaleUpperCase().split("")}
-                                hints={hints}
-                                onShowHideHints={this.setFocusOnGameBoard}
-							/>
-						</div>
-					</div>
-				</div>
-			</div>
+                        <div className="flex-row-break"></div>
+                        <div className={styles.gameControls}>
+                            <div className={styles.gameStatus}>
+                                <span className={statusClassName}>{status}</span>
+                            </div>
+                            <MonitorKeyboardEvents
+                                onKeyPressed={this.handleKeyPress}
+                                guessedLetters={guessedLetters}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </>
 		);
 	}
 

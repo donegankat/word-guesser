@@ -10,7 +10,6 @@ import GameConstants from "../game/constants/GameConstants";
 import { TestWord_Deice } from "../game/constants/TestWords";
 import { Game } from "../game/Game";
 import IWord from "../game/interfaces/IWord";
-import MainNavbar from "../game/navbar/MainNavbar";
 
 function Index({
 	winningWord
@@ -29,7 +28,6 @@ function Index({
 			<main className="main">
 				<noscript>You need to enable JavaScript to run this app.</noscript>
 				<>
-					<MainNavbar></MainNavbar>
 					<Game winningWord={winningWord} />
 				</>
 			</main>

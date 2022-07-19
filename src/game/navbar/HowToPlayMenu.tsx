@@ -4,7 +4,8 @@ import Square from "../Square";
 import styles from "../Board.module.scss";
 
 interface IHowToPlayProps {
-	show: boolean;
+	isShown: boolean;
+	onShow: () => void;
 	onHide: () => void;
 }
 
@@ -34,7 +35,8 @@ export default function HowToPlay(props: IHowToPlayProps) {
 
 	return (
 		<Offcanvas
-			show={props.show}
+			show={props.isShown}
+            onShow={props.onShow}
 			onHide={props.onHide}
 			id={"offcanvasNavbar-expand-how-to-play"}
 			aria-labelledby={"offcanvasNavbarLabel-expand-how-to-play"}

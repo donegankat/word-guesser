@@ -1,4 +1,6 @@
-button.navbarToggler {    
+button.navbarToggler {
+    border: none;
+    
     &:focus,
     &:active,
     &:active:focus {

@@ -19,10 +19,18 @@
         }
     }
 
-    .btn-enter {
-        background: #0b5ed7;
-        border-color: #0d6efd;
+    .btn-keyboard-main-action {
         height: 40px;
+    }
+
+    .btn-enter {
+        background: #0d6efd;
+        border-color: #0d6efd;
+
+        &:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
 
         &.hg-activeButton {
             background: #0a58ca;
@@ -33,7 +41,11 @@
     .btn-backspace {
         background: #6c757d;
         border-color: #6c757d;
-        height: 40px;
+
+        &:hover {
+            background-color: #5c636a;
+            border-color: #565e64;
+        }
 
         &.hg-activeButton {
             background: #565e64;
