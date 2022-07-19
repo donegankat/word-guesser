@@ -1,10 +1,10 @@
 import React from "react";
 import { Offcanvas } from "react-bootstrap";
 import IHints from "../interfaces/IHints";
-import LetterRevealer from "../hints/LetterRevealer";
-import HintRevealer from "../hints/HintRevealer";
+import LetterRevealer from "./hints/LetterRevealer";
+import HintRevealer from "./hints/HintRevealer";
 
-import styles from '../hints/Hints.module.scss';
+import styles from './hints/Hints.module.scss';
 
 interface IHintsProps {
     word?: string[];

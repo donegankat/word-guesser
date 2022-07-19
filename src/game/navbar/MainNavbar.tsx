@@ -2,12 +2,12 @@ import React from 'react';
 import { Button, Container, Modal, Nav, Navbar } from 'react-bootstrap';
 import HowToPlay from './HowToPlayMenu';
 import Settings from './SettingsMenu';
-
-import styles from './MainNavbar.module.scss';
 import IHints from '../interfaces/IHints';
 import HintsMenu from './HintsMenu';
 import { useRouter } from 'next/router';
 import { GameState } from '../constants/GameState';
+
+import styles from './MainNavbar.module.scss';
 
 interface IMainNavbarProps {
     word?: string[];
@@ -92,7 +92,6 @@ export default function MainNavbar(props: IMainNavbarProps) {
         props.setFocusOnGameBoard();
 		router.replace(router.asPath);
 	};
-
 
     return (
         <>
