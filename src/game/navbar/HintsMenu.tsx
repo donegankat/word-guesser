@@ -2,7 +2,7 @@ import React from "react";
 import { Offcanvas } from "react-bootstrap";
 import IHints from "../interfaces/IHints";
 import LetterRevealer from "./hints/LetterRevealer";
-import HintRevealer from "./hints/HintRevealer";
+import HintRow from "./hints/HintRow";
 
 import styles from './hints/Hints.module.scss';
 
@@ -17,8 +17,9 @@ interface IHintsProps {
 /**
  * Creates the "Hints" button and flyout panel with revealable hints.
  */
- export default function HintsMenu(props: IHintsProps) {
-
+export default function HintsMenu(props: IHintsProps) {
+    const hasDefinition: boolean = props.hints && props.hints.definitions && props.hints.definitions[0] ? true : false;
+     
     return (
         <>
 			{props.hints &&
@@ -46,46 +47,46 @@ interface IHintsProps {
                             </div>
                         }
                         {
+                            hasDefinition && props.hints.definitions[0].definition &&
+                            <HintRow
+                                label="Definition"
+                                hintValue={props.hints.definitions[0].definition}
+                            />
+                        }
+                        {
+                            hasDefinition && props.hints.definitions[0].partOfSpeech &&
+                            <HintRow
+                                label="Part of Speech"
+                                hintValue={props.hints.definitions[0].partOfSpeech}
+                            />
+                        }
+                        {
+                            hasDefinition && props.hints.definitions[0].synonyms &&
+                            <HintRow
+                                label="Synonyms"
+                                hintValue={props.hints.definitions[0].synonyms ? props.hints.definitions[0].synonyms.join(", ") : ""}
+                            />
+                        }
+                        {
+                            hasDefinition && props.hints.definitions[0].antonyms &&
+                            <HintRow
+                                label="Antonyms"
+                                hintValue={props.hints.definitions[0].antonyms ? props.hints.definitions[0].antonyms.join(", ") : ""}
+                            />
+                        }
+                        {
                             props.hints.syllableCount &&
-                            <div className={styles.hintRow}>
-                                <span className={styles.hintLabel}>Number of Syllables:&nbsp;</span>
-                                <span className={styles.hintValue}><HintRevealer value={props.hints.syllableCount}></HintRevealer></span>
-                            </div>
-                        }
+                            <HintRow
+                                label="Number of Syllables"
+                                hintValue={props.hints.syllableCount}
+                            />
+						}
                         {
-                            props.hints.definitions && props.hints.definitions[0].definition &&
-                            <div className={styles.hintRow}>
-                                <span className={styles.hintLabel}>Definition:&nbsp;</span>
-                                <span className={styles.hintValue}><HintRevealer value={props.hints.definitions[0].definition}></HintRevealer></span>
-                            </div>
-                        }
-                        {
-                            props.hints.definitions && props.hints.definitions[0].partOfSpeech &&
-                            <div className={styles.hintRow}>
-                                <span className={styles.hintLabel}>Part of Speech:&nbsp;</span>
-                                <span className={styles.hintValue}><HintRevealer value={props.hints.definitions[0].partOfSpeech}></HintRevealer></span>
-                            </div>
-                        }
-                        {
-                            props.hints.definitions && props.hints.definitions[0].synonyms &&
-                            <div className={styles.hintRow}>
-                                <span className={styles.hintLabel}>Synonyms:&nbsp;</span>
-                                <span className={styles.hintValue}><HintRevealer value={props.hints.definitions[0].synonyms.join(", ")}></HintRevealer></span>
-                            </div>
-                        }
-                        {
-                            props.hints.definitions && props.hints.definitions[0].antonyms &&
-                            <div className={styles.hintRow}>
-                                <span className={styles.hintLabel}>Antonyms:&nbsp;</span>
-                                <span className={styles.hintValue}><HintRevealer value={props.hints.definitions[0].antonyms.join(", ")}></HintRevealer></span>
-                            </div>
-                        }
-                        {
-                            props.hints.frequencyOfOccurrence &&
-                            <div className={styles.hintRow}>
-                                <span className={styles.hintLabel}>Frequency of Word Occurrence:&nbsp;</span>
-                                <span className={styles.hintValue}><HintRevealer value={props.hints.frequencyOfOccurrence.toFixed(2) + "%"}></HintRevealer></span>
-                            </div>
+                            props.hints.wordFrequency &&
+                            <HintRow
+                                label="Frequency of Word Occurrence"
+                                hintValue={`${props.hints.wordFrequency.frequencyOfOccurrence.toFixed(2)}% (${props.hints.wordFrequency.frequencyDescription})`}
+                            />
                         }
                     </Offcanvas.Body>
                 </Offcanvas>

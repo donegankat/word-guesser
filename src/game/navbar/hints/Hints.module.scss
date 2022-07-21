@@ -1,6 +1,10 @@
 .offcanvasHints {
-  .hintValue {
-    line-height: 40px;
+  .hintRow {
+    line-height: 30px;
+
+    .hintLabel {
+      font-weight: bold;
+    }
   }
 }
 
@@ -18,11 +22,11 @@
   .hintValue {
     display: flex;
     align-items: center;
+    line-height: 27px;
 
     .revealedLetter {
       width: 65px;
       text-align: center;
-      line-height: 27px;
     }
   }
 }

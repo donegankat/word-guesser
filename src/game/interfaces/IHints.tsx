@@ -6,9 +6,14 @@ interface IHintDefinition {
     antonyms?: string[];
 }
 
+export interface IHintWordFrequency {
+    frequencyOfOccurrence: number;
+    frequencyDescription: string;
+}
+
 export default interface IHints {
     syllableCount: number;
     definitions: IHintDefinition[];
 
-    frequencyOfOccurrence?: number;
+    wordFrequency?: IHintWordFrequency;
 }

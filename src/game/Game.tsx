@@ -3,7 +3,7 @@ import Board from "./Board";
 import GameConstants from "./constants/GameConstants";
 import { GameState } from "./constants/GameState";
 import IGuess from "./interfaces/IGuess";
-import IHints from "./interfaces/IHints";
+import IHints, { IHintWordFrequency } from "./interfaces/IHints";
 import IWord from "./interfaces/IWord";
 import MonitorKeyboardEvents from "./keyboard/KeyboardEventManager";
 import ILetterHistory from "./interfaces/ILetterHistory";
@@ -101,10 +101,32 @@ export class Game extends React.Component<IGameProps, IGameState> {
 			// approx. 1-7, so we should scale that from 1% to 100%.
 			// https://www.wordsapi.com/docs/#frequency
 			// https://stackoverflow.com/a/11107254
-			frequencyOfOccurrence: winningWord.frequency
-				? ((winningWord.frequency - 1) / 6) * 100
+			wordFrequency: winningWord.frequency
+				? this.getWordFrequency(winningWord.frequency)
 				: undefined
 		};
+	}
+
+	getWordFrequency(wordFrequency: number): IHintWordFrequency {
+		const frequencyOfOccurrence = ((wordFrequency - 1) / 6) * 100;
+		return {
+			frequencyOfOccurrence: frequencyOfOccurrence,
+			frequencyDescription: this.getWordFrequencyDescription(frequencyOfOccurrence)
+		};
+	}
+
+	getWordFrequencyDescription(frequencyOfOccurrence: number): string {
+		// Roughly equate each of the 7 possible frequency whole numbers with a
+		// description of how rare it is using the same formula we use to turn the
+		// 1-7 frequency scale to a percentage. Frequencies can have decimals, and
+		// that's ok; for the purposes of coming up with a description, we don't
+		// care.
+		if (frequencyOfOccurrence > ((6 - 1) / 6) * 100) return "extremely common";
+		if (frequencyOfOccurrence > ((5 - 1) / 6) * 100) return "very common";
+		if (frequencyOfOccurrence > ((4 - 1) / 6) * 100) return "somewhat common";
+		if (frequencyOfOccurrence > ((3 - 1) / 6) * 100) return "somewhat uncommon";
+		if (frequencyOfOccurrence > ((2 - 1) / 6) * 100) return "very uncommon";
+		return "extremely uncommon";
 	}
 
 	/**
