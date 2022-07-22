@@ -11,10 +11,12 @@
 	padding: 0;
 	text-align: center;
 	text-transform: uppercase;
+	aspect-ratio: 1 / 1;
+
+	// Used to "flip" the square to reveal the guess accuracy.
 	perspective: 1000px;
 	transform-style: preserve-3d;
 	transition: transform 0.8s, background-color 0.8s, box-shadow 0.3s;
-  aspect-ratio: 1 / 1;
 
 	&:last-child {
 		margin-right: 0;
@@ -24,9 +26,9 @@
 		outline: none;
 	}
 
-  &.invalidSubmittedGuess {
-    box-shadow: inset 0 0 8px 3px #995208;
-  }
+	&.invalidSubmittedGuess {
+		box-shadow: inset 0 0 8px 3px #995208;
+	}
 
 	&.squareHighlighted {
 		transform: rotateY(-180deg) scaleX(-1);

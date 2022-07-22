@@ -6,33 +6,33 @@ $body-color: rgb(204, 204, 204);
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
 .navbar {
-  margin: -20px -20px 20px -20px;
+	margin: -20px -20px 20px -20px;
 
-  &.navbar-dark.bg-dark {
-    background-color: #151618 !important;
-  }
+	&.navbar-dark.bg-dark {
+		background-color: #151618 !important;
+	}
 }
 
 .offcanvas {
-  background: rgb(46 49 56);
+	background: rgb(46 49 56);
 
-  &.offcanvas-lg {
-    width: unset;
-  }
+	&.offcanvas-lg {
+		width: unset;
+	}
 
-  .offcanvas-header {
-    background: #17191c;
+	.offcanvas-header {
+		background: #17191c;
 
-    .btn-close {
-      filter: invert(1);
-    }
-  }
+		.btn-close {
+			filter: invert(1);
+		}
+	}
 }
 
 .modal-content {
-  background: rgb(46 49 56);
+	background: rgb(46 49 56);
 
-  .modal-footer {
-    border-top-color: #101214;
-  }
+	.modal-footer {
+		border-top-color: #101214;
+	}
 }

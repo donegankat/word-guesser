@@ -1,67 +1,67 @@
-@import './variables.scss';
+@import "./variables.scss";
 
 .on-screen-keyboard-theme.simple-keyboard {
-    background-color: #202327;
+	background-color: #202327;
 }
 
 .on-screen-keyboard-theme.react-simple-keyboard.simple-keyboard.hg-theme-default.hg-layout-default {
-    .btn-on-screen-keyboard {
-        width: 1.9rem;
-        height: 48px;
-    }
+	.btn-on-screen-keyboard {
+		width: 1.9rem;
+		height: 48px;
+	}
 
-    .btn-letter {
-        background: #2e3138;
-        border-bottom: 1px solid #000000;
+	.btn-letter {
+		background: #2e3138;
+		border-bottom: 1px solid #000000;
 
-        &.hg-activeButton {
-            background: #202327;
-        }
-    }
+		&.hg-activeButton {
+			background: #202327;
+		}
+	}
 
-    .btn-keyboard-main-action {
-        height: 40px;
-    }
+	.btn-keyboard-main-action {
+		height: 40px;
+	}
 
-    .btn-enter {
-        background: #0d6efd;
-        border-color: #0d6efd;
+	.btn-enter {
+		background: #0d6efd;
+		border-color: #0d6efd;
 
-        &:hover {
-            background-color: #0b5ed7;
-            border-color: #0a58ca;
-        }
+		&:hover {
+			background-color: #0b5ed7;
+			border-color: #0a58ca;
+		}
 
-        &.hg-activeButton {
-            background: #0a58ca;
-            border-color: #0a53be;
-        }
-    }
-    
-    .btn-backspace {
-        background: #6c757d;
-        border-color: #6c757d;
+		&.hg-activeButton {
+			background: #0a58ca;
+			border-color: #0a53be;
+		}
+	}
 
-        &:hover {
-            background-color: #5c636a;
-            border-color: #565e64;
-        }
+	.btn-backspace {
+		background: #6c757d;
+		border-color: #6c757d;
 
-        &.hg-activeButton {
-            background: #565e64;
-            border-color: #51585e;
-        }
-    }
-    
-    .btn-correct-letter-correct-location {
-        background: $color-correct;
-    }
+		&:hover {
+			background-color: #5c636a;
+			border-color: #565e64;
+		}
 
-    .btn-correct-letter-wrong-location {
-        background: $color-correct-wrong-location;
-    }
+		&.hg-activeButton {
+			background: #565e64;
+			border-color: #51585e;
+		}
+	}
 
-    .btn-incorrect-letter {
-        background: $color-incorrect;
-    }
+	.btn-correct-letter-correct-location {
+		background: $color-correct;
+	}
+
+	.btn-correct-letter-wrong-location {
+		background: $color-correct-wrong-location;
+	}
+
+	.btn-incorrect-letter {
+		background: $color-incorrect;
+	}
 }

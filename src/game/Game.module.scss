@@ -1,42 +1,46 @@
 .game {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 
 .gameBoard {
-  height: min-content;
-  border-radius: 5px;
+	height: min-content;
+	border-radius: 5px;
 }
 
 .boardRow {
-  display: flex;
+	display: flex;
 
-  &:after {
-    clear: both;
-    content: "";
-    display: table;
-  }
+	&:after {
+		clear: both;
+		content: "";
+		display: table;
+	}
 }
 
 .gameControls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
-  .gameStatus {
-    font-size: large;
-    font-weight: bold;
-    height: 2rem;
+	.gameStatus {
+		font-size: large;
+		font-weight: bold;
+		height: 2rem;
 
-    .gameStatusShown {
-      animation: fadeIn 0.5s;
-    }
+		.gameStatusShown {
+			animation: fadeIn 0.5s;
+		}
 
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-  }
+		@keyframes fadeIn {
+			0% {
+				opacity: 0;
+			}
+			100% {
+				opacity: 1;
+			}
+		}
+	}
 }
