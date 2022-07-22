@@ -2,7 +2,7 @@ import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import WriteLog from "../data/RemoteLogManager";
 import {
-  BulkUpdateDocuments,
+	BulkUpdateDocuments,
 	LoadRandomWordFromDatabase,
 	SaveWordToDatabase
 } from "../data/WordDatabaseManager";
@@ -35,9 +35,13 @@ function Index({
 	);
 }
 
+/**
+ * This happens on the server-side, so this API request isn't visible to the end-user.
+ * @returns
+ */
 export async function getServerSideProps() {
-	const isDebugMode = process.env.IS_DEBUG_MODE;
-	const shouldLoadDebugFromRemote = process.env.LOAD_DEBUG_FROM_REMOTE_DB;
+	const isDebugMode = process.env.IS_DEBUG_MODE == "true";
+	const shouldLoadDebugFromRemote = process.env.LOAD_DEBUG_FROM_REMOTE_DB == "true";
 
 	const requestHeaderOptions = {
 		method: "GET",
@@ -49,8 +53,8 @@ export async function getServerSideProps() {
 
 	WriteLog("index.getServerSideProps", {
 		isDebugMode: isDebugMode,
-    shouldLoadDebugFromRemote: shouldLoadDebugFromRemote
-  });
+		shouldLoadDebugFromRemote: shouldLoadDebugFromRemote
+	});
 
 	var winningWord: IWord;
 
@@ -59,14 +63,14 @@ export async function getServerSideProps() {
 		if (shouldLoadDebugFromRemote) {
 			// If the app is configured to do so, load a random word from the
 			// DB of previously seen words.
-      try {
-        winningWord = await LoadRandomWordFromDatabase();
-      } catch (err) {
-        WriteLog("index.getServerSideProps", {
-          err: err
-        });
-        throw err;
-      }
+			try {
+				winningWord = await LoadRandomWordFromDatabase();
+			} catch (err) {
+				WriteLog("index.getServerSideProps", {
+					err: err
+				});
+				throw err;
+			}
 		} else {
 			// Otherwise, load from the hardcoded test file.
 			winningWord = TestWord_Deice;
@@ -88,6 +92,8 @@ export async function getServerSideProps() {
 		});
 
 		const queryString = encodedQueryKeyValuePairs.join("&");
+
+		console.log("URL", `${process.env.WORDS_API_BASE_URL}?${queryString}`);
 
 		winningWord = await fetch(
 			`${process.env.WORDS_API_BASE_URL}?${queryString}`,
