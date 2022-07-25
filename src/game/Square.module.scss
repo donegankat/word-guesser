@@ -54,14 +54,14 @@
 	&:first-child:nth-last-child(4),
 	&:first-child:nth-last-child(4) ~ .square {
 		height: 7vmax;
-		font-size: 5.1vmax;
+		font-size: 5.3vmax;
 	}
 	
 	/* Five squares */
 	&:first-child:nth-last-child(5),
 	&:first-child:nth-last-child(5) ~ .square {
 		height: 7vmax;
-		font-size: 5.0vmax;
+		font-size: 5.3vmax;
 	}
 	
 	/* Six squares */

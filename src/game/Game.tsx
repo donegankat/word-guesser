@@ -152,7 +152,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 
 		if (key === "enter") {
 			// See if we're able to submit the current guess.
-			if (canSubmit && currentGuess.letters.length === GameConstants.MaxLetters) {
+			if (canSubmit && currentGuess.letters.length === this.props.winningWord.word.length) {
                 this.submitGuess();
 			}
 		} else if (key === "backspace") {
@@ -171,7 +171,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 			// guess.
 			if (
 				((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122)) &&
-				currentLetterIndex < GameConstants.MaxLetters
+				currentLetterIndex < this.props.winningWord.word.length
 			) {
 				currentGuess.letters.push(key);
 				history[currentGuessIndex] = currentGuess;
@@ -251,7 +251,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
                             <Board
                                 history={history}
                                 maxGuesses={GameConstants.MaxGuesses}
-                                maxLetters={GameConstants.MaxLetters}
+                                maxLetters={this.props.winningWord.word.length}
                             />
                         </div>
                         <div className="flex-row-break"></div>
@@ -499,7 +499,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 	 */
 	calculateGameStatus(currentGuess: IGuess, currentGuessIndex: number): number {
 		if (
-			currentGuess.greenHighlightedSquares?.length === GameConstants.MaxLetters
+			currentGuess.greenHighlightedSquares?.length === this.props.winningWord.word.length
 		) {
 			console.log("WIN", currentGuess, currentGuessIndex);
 			return GameState.Winner;

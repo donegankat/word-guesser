@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button, Container, Image, Modal, Nav, Navbar } from 'react-bootstrap';
 import HowToPlayMenu from './HowToPlayMenu';
-import SettingsMenu from './SettingsMenu';
+import SettingsMenu from './Settings/SettingsMenu';
 import IHints from '../interfaces/IHints';
 import HintsMenu from './HintsMenu';
 import { useRouter } from 'next/router';
 import { GameState } from '../constants/GameState';
+import ResetGameConfirmationModal from './ResetGameConfirmationModal';
 
 import styles from './MainNavbar.module.scss';
 
@@ -150,6 +151,9 @@ export default function MainNavbar(props: IMainNavbarProps) {
                 isShown={showSettingsMenu}
                 onShow={handleSettingsMenuShow}
                 onHide={handleSettingsMenuClose}
+                setFocusOnGameBoard={props.setFocusOnGameBoard}
+                loseFocusOnGameBoard={props.loseFocusOnGameBoard}
+                onConfirmResetGame={handleResetGame}
             />
             <HintsMenu
                 isShown={showHintsMenu}
@@ -158,25 +162,12 @@ export default function MainNavbar(props: IMainNavbarProps) {
                 onShow={handleHintsMenuShow}
                 onHide={handleHintsMenuClose}
             />
-            <Modal
-                show={showNewGameConfirmationModal}
-				restoreFocus={false}
-				centered={true}
+            <ResetGameConfirmationModal
+                isShown={showNewGameConfirmationModal}
                 onShow={handleShowNewGameConfirmationModal}
-				onHide={handleCloseNewGameConfirmationModal}
-			>
-				<Modal.Body>
-					Lose all progress on the current game and start over with a new word?
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant="secondary" onClick={handleCloseNewGameConfirmationModal}>
-						Cancel
-					</Button>
-					<Button variant="primary" onClick={handleResetGame}>
-						Reset
-					</Button>
-				</Modal.Footer>
-			</Modal>
+                onHide={handleCloseNewGameConfirmationModal}
+                onConfirmResetGame={handleResetGame}
+            />
         </>
     )
 }

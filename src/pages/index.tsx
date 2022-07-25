@@ -1,6 +1,8 @@
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
+import React from "react";
 import WriteLog from "../data/RemoteLogManager";
+import { SettingsContext } from "../contexts/SettingsContext";
 import {
 	BulkUpdateDocuments,
 	LoadRandomWordFromDatabase,
@@ -9,11 +11,55 @@ import {
 import GameConstants from "../game/constants/GameConstants";
 import { TestWord_Deice } from "../game/constants/TestWords";
 import { Game } from "../game/Game";
+import ISettings from "../game/interfaces/ISettings";
 import IWord from "../game/interfaces/IWord";
+import { useRouter } from "next/router";
+import Cookies from 'universal-cookie';
 
-function Index({
-	winningWord
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Index({ winningWord }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+	const router = useRouter();
+	const cookies = new Cookies();
+
+	/**
+	 * Watches for changes in the cookies and refreshes the game when the settings change.
+	 */
+	const handleSettingsCookieChanged = () => {
+		var gameSettingsCookie = cookies.get(GameConstants.SettingsCookieName);
+
+		if (gameSettingsCookie && gameSettingsCookie.wordLength) {
+			// Check for any funny business and correct it if we find it.
+			if (gameSettingsCookie.wordLength < GameConstants.MinGuessLetters || gameSettingsCookie.wordLength > GameConstants.MaxGuessLetters) {
+				console.log("Invalid settings detected. Falling back to default settings.", gameSettingsCookie);
+				cookies.set(GameConstants.SettingsCookieName, getUpdatedSettingsObjectForCookie(GameConstants.DefaultGuessLetters));
+				return;
+			}
+
+			router.replace(router.asPath);
+		}
+	}
+
+	cookies.addChangeListener(handleSettingsCookieChanged);
+
+	const [wordLength, setWordLength] = React.useState(GameConstants.DefaultGuessLetters);
+
+	const handleWordLengthChange = (newWordLength: number) => {
+		setWordLength(newWordLength);
+
+		// Update the settings in the cookie.
+		cookies.set(GameConstants.SettingsCookieName, JSON.stringify(getUpdatedSettingsObjectForCookie(newWordLength)));
+	}
+
+	const getUpdatedSettingsObjectForCookie = (newWordLength: number): ISettings => {
+		return {
+			wordLength: newWordLength
+		};
+	}
+
+	const settingsContextValue = {
+		globalWordLength: wordLength,
+		setGlobalWordLength: handleWordLengthChange
+	};
+
 	return (
 		<div>
 			<Head>
@@ -21,15 +67,17 @@ function Index({
 				<meta name="description" content="Guess the word based on clues" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 				<link rel="icon" href="/favicon.ico" />
-				<link rel="apple-touch-icon" href="/logo192.png" />
+				<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+				<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+				<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 				<link rel="manifest" href="/manifest.json" />
 			</Head>
 
 			<main className="main">
 				<noscript>You need to enable JavaScript to run this app.</noscript>
-				<>
+				<SettingsContext.Provider value={settingsContextValue}>
 					<Game winningWord={winningWord} />
-				</>
+				</SettingsContext.Provider>
 			</main>
 		</div>
 	);
@@ -39,10 +87,27 @@ function Index({
  * This happens on the server-side, so this API request isn't visible to the end-user.
  * @returns
  */
-export async function getServerSideProps() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+	// Default to loading the hardcoded default number of letters per guess word, but check
+	// to see whether the user has selected a different length in the settings by reading
+	// the "gameSettings" cookie.
+	var wordLengthToLoad = GameConstants.DefaultGuessLetters;
+	const settingsCookieName = GameConstants.SettingsCookieName;
+
+	if (context.req.cookies && context.req.cookies[settingsCookieName]) {
+		var rawCookie = context.req.cookies[settingsCookieName];
+		var gameSettings = rawCookie ? JSON.parse(rawCookie) : undefined;
+		var wordLengthFromSettings = gameSettings && gameSettings.wordLength ? parseInt(gameSettings.wordLength) : -1;
+
+		// If the user has chosen a different word length to play with, use that instead.
+		if (wordLengthFromSettings > 0) {
+			wordLengthToLoad = wordLengthFromSettings;
+		}
+	}
+
 	const isDebugMode = process.env.IS_DEBUG_MODE == "true";
 	const shouldLoadDebugFromRemote = process.env.LOAD_DEBUG_FROM_REMOTE_DB == "true";
-
+	
 	const requestHeaderOptions = {
 		method: "GET",
 		headers: {
@@ -53,7 +118,8 @@ export async function getServerSideProps() {
 
 	WriteLog("index.getServerSideProps", {
 		isDebugMode: isDebugMode,
-		shouldLoadDebugFromRemote: shouldLoadDebugFromRemote
+		shouldLoadDebugFromRemote: shouldLoadDebugFromRemote,
+		wordLengthToLoad: wordLengthToLoad
 	});
 
 	var winningWord: IWord;
@@ -64,7 +130,7 @@ export async function getServerSideProps() {
 			// If the app is configured to do so, load a random word from the
 			// DB of previously seen words.
 			try {
-				winningWord = await LoadRandomWordFromDatabase();
+				winningWord = await LoadRandomWordFromDatabase(wordLengthToLoad);
 			} catch (err) {
 				WriteLog("index.getServerSideProps", {
 					err: err
@@ -79,7 +145,7 @@ export async function getServerSideProps() {
 		const queryParams = {
 			random: true,
 			letterPattern: "^[a-z]*$",
-			letters: GameConstants.MaxLetters,
+			letters: wordLengthToLoad,
 			hasDetails: "definitions,synonyms,antonyms",
 			syllablesMin: 1
 		};
