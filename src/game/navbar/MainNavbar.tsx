@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Container, Modal, Nav, Navbar } from 'react-bootstrap';
-import HowToPlay from './HowToPlayMenu';
-import Settings from './SettingsMenu';
+import { Button, Container, Image, Modal, Nav, Navbar } from 'react-bootstrap';
+import HowToPlayMenu from './HowToPlayMenu';
+import SettingsMenu from './SettingsMenu';
 import IHints from '../interfaces/IHints';
 import HintsMenu from './HintsMenu';
 import { useRouter } from 'next/router';
@@ -91,7 +91,7 @@ export default function MainNavbar(props: IMainNavbarProps) {
 		setShowNewGameConfirmationModal(false);
         props.setFocusOnGameBoard();
 		router.replace(router.asPath);
-	};
+    };
 
     return (
         <>
@@ -116,7 +116,17 @@ export default function MainNavbar(props: IMainNavbarProps) {
                             </Button>
                         </Nav.Item>
                     </Nav>
-                    <Navbar.Brand href="#">Word Guesser</Navbar.Brand>
+                    <Navbar.Brand href="#" className="me-0">
+                        Word{' '}
+                        <Image
+                            alt="Word Guesser Logo"
+                            src="/logo192.png"
+                            width="30"
+                            height="30"
+                            className="align-text-bottom"
+                            />
+                        {' '}Guesser
+                    </Navbar.Brand>
                     <Nav className="flex-row justify-content-end flex-grow-1">
                         <Nav.Item aria-controls={'offcanvasNavbar-expand-how-to-play'}>
                             <Button variant="outline-secondary" className={`me-1 ${styles.navbarToggler} navbar-toggle-how-to-play`} onClick={handleHelpMenuShow} title="How To Play">
@@ -131,12 +141,12 @@ export default function MainNavbar(props: IMainNavbarProps) {
                     </Nav>
                 </Container>
             </Navbar>
-            <HowToPlay
+            <HowToPlayMenu
                 isShown={showHelpMenu}
                 onShow={handleHelpMenuShow}
                 onHide={handleHelpMenuClose}
             />
-            <Settings
+            <SettingsMenu
                 isShown={showSettingsMenu}
                 onShow={handleSettingsMenuShow}
                 onHide={handleSettingsMenuClose}

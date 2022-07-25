@@ -45,4 +45,57 @@
 	&.squareHighlightedIncorrect {
 		background: $color-incorrect;
 	}
+
+
+
+	/* Conditional sizing based on the number of squares */
+	
+	/* Four squares */
+	&:first-child:nth-last-child(4),
+	&:first-child:nth-last-child(4) ~ .square {
+		height: 7vmax;
+		font-size: 5.1vmax;
+	}
+	
+	/* Five squares */
+	&:first-child:nth-last-child(5),
+	&:first-child:nth-last-child(5) ~ .square {
+		height: 7vmax;
+		font-size: 5.0vmax;
+	}
+	
+	/* Six squares */
+	&:first-child:nth-last-child(6),
+	&:first-child:nth-last-child(6) ~ .square {
+		height: 6vmax;
+		font-size: 4.5vmax;
+	}
+
+	/* Seven squares */
+	&:first-child:nth-last-child(7),
+	&:first-child:nth-last-child(7) ~ .square {
+		height: 5vmax;
+		font-size: 3.8vmax;
+	}
+
+	/* Eight squares */
+	&:first-child:nth-last-child(8),
+	&:first-child:nth-last-child(8) ~ .square {
+		height: 4vmax;
+		font-size: 3vmax;
+	}
+
+	/* Nine squares */
+	&:first-child:nth-last-child(9),
+	&:first-child:nth-last-child(9) ~ .square {
+		height: 3vmax;
+		font-size: 2.2vmax;
+	}
+
+	/* Ten squares */
+	&:first-child:nth-last-child(10),
+	&:first-child:nth-last-child(10) ~ .square {
+		height: 3vmax;
+		font-size: 2.2vmax;
+	}
 }

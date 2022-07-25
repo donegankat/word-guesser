@@ -9,7 +9,7 @@ interface IHowToPlayProps {
 	onHide: () => void;
 }
 
-export default function HowToPlay(props: IHowToPlayProps) {
+export default function HowToPlayMenu(props: IHowToPlayProps) {
 	const buildExampleWordRow = (
 		exampleNumber: number,
 		word: string[],

@@ -14,6 +14,10 @@ import { firestoreDb } from '../config/firebaseInit';
 import WriteLog from './RemoteLogManager';
 import GameConstants from '../game/constants/GameConstants';
 
+/**
+ * Saves the word to the Google Firestore DB for later use & tracking.
+ * @param word 
+ */
 async function SaveWordToDatabase(word: IWord) {
     if (word) {
         var doesDocExist = await CheckWordExistsInDatabase(word.word);
@@ -39,6 +43,11 @@ async function SaveWordToDatabase(word: IWord) {
     }
 }
 
+/**
+ * Returns true if the given word exists in the Google Firestore DB, or false otherwise.
+ * @param word 
+ * @returns 
+ */
 async function CheckWordExistsInDatabase(word: string) {
     if (!word || word.length <= 0) return false;
 
@@ -52,17 +61,25 @@ async function CheckWordExistsInDatabase(word: string) {
     }
 }
 
-async function LoadRandomWordFromDatabase(): Promise<IWord> {
+/**
+ * Loads a random word that has already been seen before from the Google Firestore DB.
+ * Primarily used for testing and debugging.
+ * @param wordLengthToLoad 
+ * @returns 
+ */
+async function LoadRandomWordFromDatabase(wordLengthToLoad?: number): Promise<IWord> {
+    if (!wordLengthToLoad) wordLengthToLoad = GameConstants.DefaultGuessLetters;
+    
     const wordsQuery = query(
         collection(firestoreDb, "words"),
-        where("length", "==", GameConstants.MaxLetters)
+        where("length", "==", wordLengthToLoad)
     );
 
     const querySnapshot = await getDocs(wordsQuery);
     const docsLength = querySnapshot.docs.length;
 
     if (docsLength === 0)
-        throw `Failed to retrieve a random word from the database with the requested length of ${GameConstants.MaxLetters}`;
+        throw `Failed to retrieve a random word from the database with the requested length of ${wordLengthToLoad}`;
     
     const randomDocIndex = getRandomDocIndex(0, docsLength);
 

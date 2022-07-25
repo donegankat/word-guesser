@@ -1,3 +1,4 @@
+import React from "react";
 import { Offcanvas } from "react-bootstrap";
 
 interface ISettingsProps {
@@ -6,7 +7,8 @@ interface ISettingsProps {
     onHide: () => void;
 }
 
-export default function Settings(props: ISettingsProps) {
+export default function SettingsMenu(props: ISettingsProps) {
+	
     return (
         <Offcanvas
             show={props.isShown}
@@ -24,7 +26,7 @@ export default function Settings(props: ISettingsProps) {
                 </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-                <div>
+            <div>
                     Not yet implemented. Check back later! :D
                 </div>
             </Offcanvas.Body>

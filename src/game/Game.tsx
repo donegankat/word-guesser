@@ -243,7 +243,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
                     hints={hints}
                     currentGameState={gameStatus}
                     loseFocusOnGameBoard={this.loseFocusOnGameBoard}
-                    setFocusOnGameBoard={this.setFocusOnGameBoard}
+					setFocusOnGameBoard={this.setFocusOnGameBoard}
                 ></MainNavbar>
                 <div className="game-wrapper">
                     <div id="game-container" className={styles.game}>

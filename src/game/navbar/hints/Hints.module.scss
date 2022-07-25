@@ -15,12 +15,13 @@
 
 .hintRow.hintLettersRow {
 	display: flex;
-	align-items: center;
 	flex-wrap: wrap;
+	align-items: center;
 	line-height: 40px;
 
 	.hintValue {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		line-height: 27px;
 
