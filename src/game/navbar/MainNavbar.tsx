@@ -97,7 +97,7 @@ export default function MainNavbar(props: IMainNavbarProps) {
     return (
         <>
             <Navbar bg="dark" variant="dark" key="main-navbar" expand={false} className="mb-3 px-2">
-                <Container fluid>
+                <Container fluid className="p-0 px-sm-2">
                     <Nav className="flex-row justify-content-start flex-grow-1">
                         <Nav.Item aria-controls={'offcanvasNavbar-expand-hints'}>
                             <Button variant="outline-secondary" className={`me-1 ${styles.navbarToggler} navbar-toggle-hints`} onClick={handleHintsMenuShow} title="Hints">
@@ -117,7 +117,7 @@ export default function MainNavbar(props: IMainNavbarProps) {
                             </Button>
                         </Nav.Item>
                     </Nav>
-                    <Navbar.Brand href="#" className="me-0">
+                    <Navbar.Brand href="#" className="me-0 py-0">
                         Word{' '}
                         <Image
                             alt="Word Guesser Logo"

@@ -27,12 +27,10 @@ function Index({ winningWord }: InferGetServerSidePropsType<typeof getServerSide
 	 */
 	React.useEffect(() => {
 		const loadStart = () => {
-			console.log("Loading started");
 			setLoading(true);
 		};
 
 		const loadEnd = () => {
-			console.log("Loading finished");
 			setLoading(false);
 		};
 
