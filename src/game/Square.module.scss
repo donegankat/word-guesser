@@ -53,49 +53,49 @@
 	/* Four squares */
 	&:first-child:nth-last-child(4),
 	&:first-child:nth-last-child(4) ~ .square {
-		height: 7vmax;
-		font-size: 5.3vmax;
+		height: 60px;
+		font-size: 45px;
 	}
 	
 	/* Five squares */
 	&:first-child:nth-last-child(5),
 	&:first-child:nth-last-child(5) ~ .square {
-		height: 7vmax;
-		font-size: 5.3vmax;
+		height: 60px;
+		font-size: 45px;
 	}
 	
 	/* Six squares */
 	&:first-child:nth-last-child(6),
 	&:first-child:nth-last-child(6) ~ .square {
-		height: 6vmax;
-		font-size: 4.5vmax;
+    	height: 3.3rem;
+		font-size: 2.5rem;
 	}
 
 	/* Seven squares */
 	&:first-child:nth-last-child(7),
 	&:first-child:nth-last-child(7) ~ .square {
-		height: 5vmax;
-		font-size: 3.8vmax;
+		height: 2.8rem;
+    	font-size: 2.1rem;
 	}
 
 	/* Eight squares */
 	&:first-child:nth-last-child(8),
 	&:first-child:nth-last-child(8) ~ .square {
-		height: 4vmax;
-		font-size: 3vmax;
+		height: 2.4rem;
+    	font-size: 1.8rem;
 	}
 
 	/* Nine squares */
 	&:first-child:nth-last-child(9),
 	&:first-child:nth-last-child(9) ~ .square {
-		height: 3vmax;
-		font-size: 2.2vmax;
+		height: 2.1rem;
+		font-size: 1.5rem;
 	}
 
 	/* Ten squares */
 	&:first-child:nth-last-child(10),
 	&:first-child:nth-last-child(10) ~ .square {
-		height: 3vmax;
-		font-size: 2.2vmax;
+		height: 1.9rem;
+    	font-size: 1.4rem;
 	}
 }

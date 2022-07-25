@@ -1,0 +1,58 @@
+.loadingOverlay {
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #20232775;
+	overflow-x: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+    // Unless both of these are provided, there's a strange flicker at the end of the animation.
+	transition: opacity 1.5s;
+	animation-duration: 1.5s;
+
+	&.isLoaded {
+        display: none;
+	}
+
+    &.isLoadedAndFadingOut {
+		animation: fadeOut 0.5s;
+        opacity: 0;
+    }
+
+	&.isLoading {
+		animation: fadeIn 0.5s;
+        opacity: 1;
+	}
+
+	.loadingContainer {
+		.loadingContainerSpinner {
+			width: 10rem;
+			height: 10rem;
+		}
+	}
+
+    @keyframes fadeIn {
+		0% {
+			opacity: 0;
+		}
+
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes fadeOut {
+		0% {
+			opacity: 1;
+		}
+
+		100% {
+			opacity: 0;
+		}
+	}
+}

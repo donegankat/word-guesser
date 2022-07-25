@@ -13,11 +13,40 @@ import { TestWord_Deice } from "../game/constants/TestWords";
 import { Game } from "../game/Game";
 import ISettings from "../game/interfaces/ISettings";
 import IWord from "../game/interfaces/IWord";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import Cookies from 'universal-cookie';
+import LoadingOverlay from "../game/LoadingOverlay";
 
 function Index({ winningWord }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const router = useRouter();
+	const [loading, setLoading] = React.useState(false);
+
+	/**
+	 * Keep track of the router loading state so that we can show
+	 * a loading indicator while the server loads data.
+	 */
+	React.useEffect(() => {
+		const loadStart = () => {
+			console.log("Loading started");
+			setLoading(true);
+		};
+
+		const loadEnd = () => {
+			console.log("Loading finished");
+			setLoading(false);
+		};
+
+		Router.events.on("routeChangeStart", loadStart);
+		Router.events.on("routeChangeComplete", loadEnd);
+		Router.events.on("routeChangeError", loadEnd);
+
+		return () => {
+			Router.events.off("routeChangeStart", loadStart);
+			Router.events.off("routeChangeComplete", loadEnd);
+			Router.events.off("routeChangeError", loadEnd);
+		};
+	}, []);
+
 	const cookies = new Cookies();
 
 	/**
@@ -75,6 +104,7 @@ function Index({ winningWord }: InferGetServerSidePropsType<typeof getServerSide
 
 			<main className="main">
 				<noscript>You need to enable JavaScript to run this app.</noscript>
+				<LoadingOverlay isLoading={loading} />
 				<SettingsContext.Provider value={settingsContextValue}>
 					<Game winningWord={winningWord} />
 				</SettingsContext.Provider>

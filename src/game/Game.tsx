@@ -244,27 +244,27 @@ export class Game extends React.Component<IGameProps, IGameState> {
                     currentGameState={gameStatus}
                     loseFocusOnGameBoard={this.loseFocusOnGameBoard}
 					setFocusOnGameBoard={this.setFocusOnGameBoard}
-                ></MainNavbar>
-                <div className="game-wrapper">
-                    <div id="game-container" className={styles.game}>
-                        <div className={styles.gameBoard} tabIndex={0}>
-                            <Board
-                                history={history}
-                                maxGuesses={GameConstants.MaxGuesses}
-                                maxLetters={this.props.winningWord.word.length}
-                            />
-                        </div>
-                        <div className="flex-row-break"></div>
-                        <div className={styles.gameControls}>
-                            <div className={styles.gameStatus}>
-                                <span className={statusClassName}>{status}</span>
-                            </div>
-                            <MonitorKeyboardEvents
-                                onKeyPressed={this.handleKeyPress}
-                                guessedLetters={guessedLetters}
-                            />
-                        </div>
-                    </div>
+				></MainNavbar>
+				<div className="game-wrapper">
+					<div id="game-container" className={styles.game}>
+						<div className={styles.gameBoard} tabIndex={0}>
+							<Board
+								history={history}
+								maxGuesses={GameConstants.MaxGuesses}
+								maxLetters={this.props.winningWord.word.length}
+							/>
+						</div>
+						<div className="flex-row-break"></div>
+						<div className={styles.gameControls}>
+							<div className={styles.gameStatus}>
+								<span className={statusClassName}>{status}</span>
+							</div>
+							<MonitorKeyboardEvents
+								onKeyPressed={this.handleKeyPress}
+								guessedLetters={guessedLetters}
+							/>
+						</div>
+					</div>
                 </div>
             </>
 		);
