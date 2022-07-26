@@ -1,46 +1,58 @@
-# Getting Started with Create React App
+<p align="center">
+    <img src="./public/logo192.png" alt="Next.JS React Word Guesser Game"/>
+    <h1 align="center">
+        Next.JS React Word Guesser Game
+    </h1>
+</p>
+<p align="center">
+    <a href="https://app.netlify.com/sites/kd-word-guesser/deploys" aria-label="Netlify Status">
+        <img src="https://api.netlify.com/api/v1/badges/0c2ccd66-0f58-43a3-a70a-197834cc0f20/deploy-status" alt="Netlify Status" />        
+    </a>
+</p>
+<hr/>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Game Overview
+This game is inspired by [Wordle](https://www.nytimes.com/games/wordle/index.html), with a few major differences:
 
-## Available Scripts
+- This version gives you access to hints that you can use at any point during the game
+- You can configure the game's options, such as being able to choose how long you want the word you're guessing to be
+- You can play as many times as you like per day
 
-In the project directory, you can run:
+You can find the deployed app live here: https://main--kd-word-guesser.netlify.app/
 
-### `npm start`
+See the help/instructions menu in the game for more information.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Technical Overview
+- This game was written in React TypeScript and was built on the Next.JS framework
+- It utilizes a combination of React/Next's client-side rendering for the bulk of the user interaction and game funcitonality, plus Next.JS' server-side rendering capabilities to be able to load and process data behind the scenes so as to protect API keys and other pieces of data
+- The deployed version of the app linked above is hosted by Netlify, and integrates with this repository for continuous deployment
+- This app utilizes Google Firebase for cloud database storage, validation, and logging
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Build & Deploy
 
-### `npm test`
+## Prerequisites
+1. Sign up for an API key for [Words API](https://www.wordsapi.com/)
+2. Add the following file to your local copy of the repo in the root directory: .env.local
+3. Inside of .env.local, add the following line and provide your Words API key: `WORDS_API_KEY="YOUR_API_KEY_HERE"`
+4. Edit the [Firebase config settings](./src/config/firebaseConfig.tsx) and replace the `firebaseConfig` with your own Firebase account settings
+5. Update the [Firebase project name](.firebaserc)
+6. Install Firebase Tools: `npm install -g firebase-tools`
+7. Authenticate with Firebase: `firebase login`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Build Locally in Development Mode
+Run `npm run dev` from the command line inside of the main directory to run in development mode and automatically recompile when files change.
 
-### `npm run build`
+## Build Locally in Release Mode
+To build and run the app in release mode locally:
+- Run `npm run build` to build in release mode.
+- Then run `npm run start` to launch the release build locally.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Build and Deploy Live to Netlify
+To build and deploy a new update live to the hosted Netlify site where the app is hosted, you don't need to run any commands at all. Netlify is already automatically integrated with this repository for continuous deployment, so simply committing to this repo will automatically trigger a build and deployment to https://main--kd-word-guesser.netlify.app/.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# About and Attributions
+This game and repository were created and are maintained by [Kat Donegan](https://github.com/donegankat).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This game is a hobby project inspired by [Wordle](https://www.nytimes.com/games/wordle/index.html), and was primarily used as a way to learn new tools, patterns, and practices in addition to adding a few fun features that are missing from the original game.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+The app logo was adapted from the &quot;Dice Question Mark&quot; icon by icon4yu on NounProject.com.

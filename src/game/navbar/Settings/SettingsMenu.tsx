@@ -61,7 +61,8 @@ export default function SettingsMenu(props: ISettingsProps) {
 				<ToggleButton
 					id={`tbg-radio-${i}`}
 					key={`btn-word-length-${i}`}
-					value={i}
+                    value={i}
+                    variant="secondary"
 				>
 					{i}
 				</ToggleButton>
