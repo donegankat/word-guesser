@@ -44,10 +44,10 @@ export default function HintsMenu(props: IHintsProps) {
 					<Offcanvas.Body>
 						{props.word && (
 							<div className={`${styles.hintRow} ${styles.hintLettersRow}`}>
-								<span className={styles.hintLabel}>Reveal a Letter:&nbsp;</span>
-								<span className={styles.hintValue}>
+								<h6 className={styles.hintLabel}>Reveal a Letter</h6>
+								<div className={`${styles.hintValue} ${styles.hintLettersGrid}`}>
 									<LetterRevealer letters={props.word}></LetterRevealer>
-								</span>
+								</div>
 							</div>
 						)}
 						{hasDefinition && props.hints.definitions[0].definition && (

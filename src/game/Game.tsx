@@ -191,7 +191,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 		// Force the focus back to the game board so that subsequent "Enter"s don't cause
 		// another click on the button. Having the "Enter" key re-click the button could
         // cause annoying behavior like a game reset or showing the hints again.
-        var board = document.getElementById("game-container");
+		var board = document.getElementById("game-container");
 		if (board && board.firstElementChild && board.firstElementChild.firstElementChild)
             (board.firstElementChild.firstElementChild as HTMLElement).focus();
         

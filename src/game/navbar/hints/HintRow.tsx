@@ -13,9 +13,9 @@ export default function HintRow(props: IHintRowProps) {
         <>
             {
                 props.hintValue &&
-                <div className={`${styles.hintRow} my-2`}>
-                    <span className={styles.hintLabel}>{props.label}:&nbsp;</span>
-                    <span className={styles.hintValue}><HintRevealer value={props.hintValue}></HintRevealer></span>
+                <div className={`${styles.hintRow} my-4`}>
+                    <h6 className={styles.hintLabel}>{props.label}</h6>
+                    <div className={styles.hintValue}><HintRevealer value={props.hintValue}></HintRevealer></div>
                 </div>
             }
         </>

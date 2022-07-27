@@ -3,7 +3,7 @@
 		line-height: 30px;
 
 		.hintLabel {
-			font-weight: bold;
+			color: #e9ecef;
 		}
 	}
 }
@@ -14,19 +14,17 @@
 }
 
 .hintRow.hintLettersRow {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
 	line-height: 40px;
 
 	.hintValue {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
+		display: grid;
+		grid-column-gap: 5px;
+		grid-row-gap: 5px;
+		grid-auto-columns: max-content;
+		grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
 		line-height: 27px;
 
 		.revealedLetter {
-			width: 65px;
 			text-align: center;
 		}
 	}

@@ -19,7 +19,12 @@ export default function LetterRevealer(props: ILetterRevealerProps) {
         for (var i = 0; i < props.letters.length; i++) {
             if (revealedLetters.indexOf(i) > -1) {
                 letterRevealButtons.push(
-                    <span key={`spn-reveal-letter${i}`} className={styles.revealedLetter}>{props.letters[i]}</span>
+                    <span
+                        key={`spn-reveal-letter${i}`}
+                        className={`${styles.revealedLetter}`}
+                    >
+                        {props.letters[i]}
+                    </span>
                 );
             } else {
                 letterRevealButtons.push(
@@ -33,7 +38,13 @@ export default function LetterRevealer(props: ILetterRevealerProps) {
 
     const buildRevealButton = (letterIndex: number) => {
         return (
-            <button key={`btn-reveal-letter${letterIndex}`} className={`btn ${styles.btnRevealHint} ${styles.btnRevealLetter} btn-light me-1`} onClick={(e) => handleRevealLetter(e, letterIndex)}>Reveal {letterIndex + 1}</button>
+            <button
+                key={`btn-reveal-letter${letterIndex}`}
+                className={`btn ${styles.btnRevealHint} ${styles.btnRevealLetter} btn-secondary`}
+                onClick={(e) => handleRevealLetter(e, letterIndex)}
+            >
+                Reveal {letterIndex + 1}
+            </button>
         )
     }
 

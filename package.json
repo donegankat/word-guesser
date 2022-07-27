@@ -24,9 +24,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next export",
-    "predeploy": "npm run build",
-    "deploy": "firebase deploy"
+    "export": "next export"
   },
   "eslintConfig": {
     "extends": [
