@@ -17,15 +17,17 @@ const requestHeaderOptions = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const props: IWordApiManagerProps = JSON.parse(req.body);
+    const shouldCheckGuessValidity = process.env.CHECK_GUESS_VALIDITY && process.env.CHECK_GUESS_VALIDITY == "true";
 
     // To save on API/DB hits, only check validity when configuration demands it.
-    if (!process.env.CHECK_GUESS_VALIDITY)
-        return res.status(200).json({isValidGuess: true});
+    if (!shouldCheckGuessValidity) {
+        console.log("SKIPPING VALIDITY CHECK", props.wordToCheck);
+        return res.status(200).json({ isValidGuess: true });
+    }
 
-    console.log("CHECKING GUESS", props, props.wordToCheck);
+    console.log("CHECKING GUESS", props.wordToCheck);
     WriteLog("checkGuessValidity.handler", {
         message: "Checking guess",
-        word: props.wordToCheck,
         wordToCheck: props.wordToCheck
     });
 
@@ -55,10 +57,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 return true;
             })
             .catch((err) => {
-                console.error("VALIDITY RESULT ERROR", err);
+                console.error("VALIDITY RESULT ERROR", props.wordToCheck, err);
                 WriteLog("checkGuessValidity.handler", {
                     message: "Invalid check",
-                    word: props.wordToCheck,
+                    wordToCheck: props.wordToCheck,
                     error: err
                 });
                 return false;

@@ -1,7 +1,7 @@
 <p align="center">
-    <img src="./public/logo192.png" alt="Next.JS React Word Guesser Game"/>
+    <img src="./public/logo192.png" alt="Next.js React Word Guesser Game"/>
     <h1 align="center">
-        Next.JS React Word Guesser Game
+        Next.js React Word Guesser Game
     </h1>
 </p>
 <p align="center">
@@ -23,8 +23,8 @@ You can find the deployed app live here: https://main--kd-word-guesser.netlify.a
 See the help/instructions menu in the game for more information.
 
 # Technical Overview
-- This game was written in React TypeScript and was built on the Next.JS framework
-- It utilizes a combination of React/Next's client-side rendering for the bulk of the user interaction and game funcitonality, plus Next.JS' server-side rendering capabilities to be able to load and process data behind the scenes so as to protect API keys and other pieces of data
+- This game was written in React TypeScript and was built on the Next.js framework
+- It utilizes a combination of React/Next's client-side rendering for the bulk of the user interaction and game funcitonality, plus Next.js' server-side rendering capabilities to be able to load and process data behind the scenes so as to protect API keys and other pieces of data
 - The deployed version of the app linked above is hosted by Netlify, and integrates with this repository for continuous deployment
 - This app utilizes Google Firebase for cloud database storage, validation, and logging
 

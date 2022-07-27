@@ -88,7 +88,7 @@ async function LoadRandomWordFromDatabase(wordLengthToLoad?: number): Promise<IW
         docArray.push(wordDoc.data().word);
     });
     
-    console.log("RAND", docArray[randomDocIndex]);
+    console.log("LOADED RANDOM WORD FROM DB", docArray[randomDocIndex]);
     return docArray[randomDocIndex];
 }
 

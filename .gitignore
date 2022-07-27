@@ -12,6 +12,7 @@
 # Firebase
 firebase-debug.log
 hosting.*.cache
+/.firebase
 
 # testing
 /coverage
