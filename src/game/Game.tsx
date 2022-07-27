@@ -154,6 +154,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
 			// See if we're able to submit the current guess.
 			if (canSubmit && currentGuess.letters.length === this.props.winningWord.word.length) {
                 this.submitGuess();
+			} else if (canSubmit) {
+				this.alertInvalidGuess();
 			}
 		} else if (key === "backspace") {
 			// Delete a letter from the current guess.
@@ -284,24 +286,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
         
         const isValidGuess: boolean = await this.checkGuessValidity(currentGuess.letters.join(""));
         if (!isValidGuess) {
-            currentGuess.isInvalidGuess = true;
-            history[currentGuessIndex] = currentGuess;
-            
-            this.setState({
-                guessHistory: history
-            });
-
-            // Once we've alerted the user that their guess was invalid, remove the
-            // CSS class that causes the row to stand out.
-            setTimeout(() => {
-                currentGuess.isInvalidGuess = false;
-                history[currentGuessIndex] = currentGuess;
-
-                this.setState({
-                    guessHistory: history
-                });
-            }, 1000);
-            return;
+			this.alertInvalidGuess();
+			return;
         }
 
         // Evaluate the accuracy of the current guess and move on to the next guess.
@@ -331,6 +317,33 @@ export class Game extends React.Component<IGameProps, IGameState> {
             currentGuessIndex: nextGuessIndex
         });
     }
+
+	/**
+	 * Temporarily marks the current guess as invalid so as to communicate to the
+	 * user that they need to try again with a better guess.
+	 */
+	alertInvalidGuess() {
+		var history = this.state.guessHistory;
+		var currentGuessIndex = this.state.currentGuessIndex;
+		var currentGuess = history[currentGuessIndex];
+		currentGuess.isInvalidGuess = true;
+		history[currentGuessIndex] = currentGuess;
+		
+		this.setState({
+			guessHistory: history
+		});
+
+		// Once we've alerted the user that their guess was invalid, remove the
+		// CSS class that causes the row to stand out.
+		setTimeout(() => {
+			currentGuess.isInvalidGuess = false;
+			history[currentGuessIndex] = currentGuess;
+
+			this.setState({
+				guessHistory: history
+			});
+		}, 1000);
+	}
 
 	/**
 	 * Evaluates the accuracy of the current guess on submit, and colors the

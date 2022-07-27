@@ -41,7 +41,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 if (response.status < 300) {
                     return response.json();
                 } else {
-                    console.log("INVALID", response)
                     throw `Invalid guess: ${props.wordToCheck}`
                 }
             })
@@ -49,7 +48,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 // The word should already come back lower-cased, but lower-case it again
                 // anyway just in case. This ensures that we can accurately compare guesses.
                 jsonResponse.word = jsonResponse.word.toLocaleLowerCase();
-                console.log("VALID RESULT", jsonResponse);
 
                 // If we managed to find a matching word, save it to our own DB so that we
                 // never have to call the Words API again to check for it.
