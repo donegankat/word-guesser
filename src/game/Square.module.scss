@@ -12,6 +12,9 @@
 	text-align: center;
 	text-transform: uppercase;
 	aspect-ratio: 1 / 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
 	// Used to "flip" the square to reveal the guess accuracy.
 	perspective: 1000px;

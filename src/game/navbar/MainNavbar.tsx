@@ -78,13 +78,13 @@ export default function MainNavbar(props: IMainNavbarProps) {
 		if (props.currentGameState === GameState.Playing) {
 			setShowNewGameConfirmationModal(true);
 		} else {
-			// Force the focus off of the "New Game" button.
+            // Force the focus off of the "New Game" button.
 			// Simply calling .focus() on the game boards isn't enough on its
 			// own to make this stubborn button lose focus, so .blur() is also
 			// necessary.
-			(e.target as HTMLElement).blur();
-
-			handleResetGame();
+			(e.target as HTMLElement).parentElement?.blur();
+			
+            handleResetGame();
 		}
 	};
 
@@ -100,16 +100,20 @@ export default function MainNavbar(props: IMainNavbarProps) {
                 <Container fluid className="p-0 px-sm-2">
                     <Nav className="flex-row justify-content-start flex-grow-1">
                         <Nav.Item aria-controls={'offcanvasNavbar-expand-hints'}>
-                            <Button variant="outline-secondary" className={`me-1 ${styles.navbarToggler} navbar-toggle-hints`} onClick={handleHintsMenuShow} title="Hints">
+                            <Button
+                                variant="outline-secondary"
+                                className={`me-1 ${styles.navbarToggler}`}
+                                title="Hints"
+                                onClick={handleHintsMenuShow}
+                            >
                                 <i className="bi bi-lightbulb"></i>
                             </Button>
                         </Nav.Item>
                         <Nav.Item aria-controls={'offcanvasNavbar-expand-hints'}>
                             <Button
                                 variant="outline-secondary"
-                                className={`me-1 ${styles.navbarToggler} navbar-toggle-new-game`}
+                                className={`me-1 ${styles.navbarToggler}`}
                                 type="reset"
-                                autoFocus={false}
                                 title="New Game"
                                 onClick={handleNewGameButtonClick}
                             >
@@ -130,12 +134,22 @@ export default function MainNavbar(props: IMainNavbarProps) {
                     </Navbar.Brand>
                     <Nav className="flex-row justify-content-end flex-grow-1">
                         <Nav.Item aria-controls={'offcanvasNavbar-expand-how-to-play'}>
-                            <Button variant="outline-secondary" className={`me-1 ${styles.navbarToggler} navbar-toggle-how-to-play`} onClick={handleHelpMenuShow} title="How To Play">
+                            <Button
+                                variant="outline-secondary"
+                                className={`me-1 ${styles.navbarToggler}`}
+                                title="How To Play"
+                                onClick={handleHelpMenuShow}
+                            >
                                 <i className="bi bi-question-circle"></i>
                             </Button>
                         </Nav.Item>
                         <Nav.Item aria-controls={'offcanvasNavbar-expand-settings'}>
-                            <Button variant="outline-secondary" className={`me-0 ${styles.navbarToggler} navbar-toggle-settings`} onClick={handleSettingsMenuShow} title="Settings">
+                            <Button
+                                variant="outline-secondary"
+                                className={`me-0 ${styles.navbarToggler}`}
+                                title="Settings"
+                                onClick={handleSettingsMenuShow}
+                            >
                                 <i className="bi bi-gear"></i>
                             </Button>
                         </Nav.Item>
