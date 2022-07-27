@@ -9,7 +9,6 @@
 }
 
 .btnRevealHint {
-	padding: 0.2rem 0.3rem;
 	font-size: small;
 }
 
@@ -23,6 +22,11 @@
 		grid-auto-columns: max-content;
 		grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
 		line-height: 27px;
+
+		.btnRevealHint {
+			padding-left: 0.3rem;
+			padding-right: 0.3rem;
+		}
 
 		.revealedLetter {
 			text-align: center;

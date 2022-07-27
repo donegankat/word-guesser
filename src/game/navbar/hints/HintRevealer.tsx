@@ -12,6 +12,6 @@ export default function HintRevealer(props: IHintRevealer) {
     return (isHintRevealed ?
         <span>{props.value}</span>
         :
-        <button className={`btn btn-secondary ${styles.btnRevealHint}`} onClick={() => {setIsHintRevealed(true)}}>Reveal</button>
+        <button className={`btn btn-secondary ${styles.btnRevealHint}`} onClick={() => {setIsHintRevealed(true)}}>Reveal Hint</button>
     );
 }
