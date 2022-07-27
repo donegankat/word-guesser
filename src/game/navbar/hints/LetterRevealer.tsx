@@ -43,7 +43,7 @@ export default function LetterRevealer(props: ILetterRevealerProps) {
                 className={`btn ${styles.btnRevealHint} ${styles.btnRevealLetter} btn-secondary`}
                 onClick={(e) => handleRevealLetter(e, letterIndex)}
             >
-                Reveal {letterIndex + 1}
+                Letter {letterIndex + 1}
             </button>
         )
     }
