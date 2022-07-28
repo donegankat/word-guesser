@@ -10,6 +10,7 @@ import ILetterHistory from "./interfaces/ILetterHistory";
 import MainNavbar from "./navbar/MainNavbar";
 
 import styles from "./Game.module.scss";
+import { logGameStart, logGameEnd, logGuessAttempt } from "../config/firebaseInit";
 
 interface IGameProps {
 	winningWord: IWord;
@@ -21,7 +22,7 @@ interface IGameState {
 	guessHistory: IGuess[];
 	guessedLetters: ILetterHistory;
 	currentGuessIndex: number;
-	winningWord?: IWord;
+	winningWord: IWord;
 	hints?: IHints;
 }
 
@@ -32,6 +33,7 @@ interface IGameState {
 export class Game extends React.Component<IGameProps, IGameState> {
 	constructor(props: IGameProps) {
 		super(props);
+		logGameStart(props.winningWord.word);
 
 		this.state = this.resetGameState(props.winningWord);
 
@@ -231,7 +233,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
 			status = "You won!";
             statusClassName = styles.gameStatusShown;
 		} else if (gameStatus === GameState.Loser) {
-			status = `You lost. Answer: ${winningWord?.word.toLocaleUpperCase()}`;
+			status = `You lost. Answer: ${winningWord.word.toLocaleUpperCase()}`;
             statusClassName = styles.gameStatusShown;
         } else if (currentGuess.isInvalidGuess) {
             status = "Invalid guess";
@@ -241,7 +243,7 @@ export class Game extends React.Component<IGameProps, IGameState> {
         return (
             <>
                 <MainNavbar
-                    word={winningWord?.word?.toLocaleUpperCase().split("")}
+                    word={winningWord.word?.toLocaleUpperCase().split("")}
                     hints={hints}
                     currentGameState={gameStatus}
                     loseFocusOnGameBoard={this.loseFocusOnGameBoard}
@@ -352,8 +354,6 @@ export class Game extends React.Component<IGameProps, IGameState> {
 	 * @returns
 	 */
 	evaluateGuessLetterAccuracy(guess: IGuess): IGuess {
-		if (!this.state.winningWord) return guess;
-
 		guess.isSubmitted = true;
 
 		const winningWord = this.state.winningWord.word.split("");
@@ -495,7 +495,6 @@ export class Game extends React.Component<IGameProps, IGameState> {
         })
         .then(response => response.json())
         .then((jsonResponse: { isValidGuess: boolean }) => {
-            console.log(jsonResponse);
             return jsonResponse.isValidGuess;
         })
         .catch(err => {
@@ -503,7 +502,8 @@ export class Game extends React.Component<IGameProps, IGameState> {
             throw err;
         });
 
-        return isValidGuess;
+		logGuessAttempt(this.state.winningWord.word, wordToCheck, isValidGuess);
+		return isValidGuess;
     }
 
 	/**
@@ -514,9 +514,11 @@ export class Game extends React.Component<IGameProps, IGameState> {
 		if (
 			currentGuess.greenHighlightedSquares?.length === this.props.winningWord.word.length
 		) {
+  			logGameEnd(this.props.winningWord.word, true);
 			console.log("WIN", currentGuess, currentGuessIndex);
 			return GameState.Winner;
 		} else if (currentGuessIndex >= GameConstants.MaxGuesses - 1) {
+  			logGameEnd(this.props.winningWord.word, false);
 			console.log("LOSE", currentGuess, currentGuessIndex);
 			return GameState.Loser;
 		}
