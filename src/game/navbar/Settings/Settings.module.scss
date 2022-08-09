@@ -1,5 +1,13 @@
 .saveButtonBlock {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.copyrightBlock {
     position: absolute;
     bottom: 20px;
-    right: 20px;
+    text-align: center;
+    width: -webkit-fill-available;
+    padding-right: 1rem;
+    margin-right: 1rem;
 }

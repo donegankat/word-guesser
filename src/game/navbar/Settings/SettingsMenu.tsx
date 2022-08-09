@@ -107,10 +107,32 @@ export default function SettingsMenu(props: ISettingsProps) {
 										</ToggleButtonGroup>
 									</div>
 								</div>
-                                <div className={`${styles.saveButtonBlock}`}>
+								<div className={`${styles.saveButtonBlock}`}>
 									<Button onClick={handleShowNewGameConfirmationModal}>
 										Save
 									</Button>
+								</div>
+								<div className={`${styles.copyrightBlock} text-muted`}>
+									<div>
+										<hr />
+										&copy; {new Date().getFullYear()}{" "}
+										<a
+											className="text-muted"
+											href="https://katdonegan.com"
+											title="Personal Website for Kat Donegan"
+										>
+											Kat Donegan
+										</a>
+									</div>
+									<div>
+										<a
+											className="text-muted"
+											href="https://github.com/donegankat/word-guesser"
+											title="GitHub repository for the Word Guesser game"
+										>
+											Word Guesser GitHub
+										</a>
+									</div>
 								</div>
 							</div>
 						)}

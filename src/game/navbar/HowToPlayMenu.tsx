@@ -73,12 +73,12 @@ export default function HowToPlayMenu(props: IHowToPlayProps) {
 
 					<div>
 						<h4>Examples</h4>
-						{buildExampleWordRow(0, ["L", "I", "O", "N", "S"], [1], [])}
+						{buildExampleWordRow(0, ["L", "I", "O", "N", "S"], [3], [])}
 						<br />
-						<p>The letter I is in the word and in the correct spot.</p>
-						{buildExampleWordRow(1, ["T", "I", "G", "E", "R"], [], [3])}
+						<p>The letter N is in the word and in the correct spot.</p>
+						{buildExampleWordRow(1, ["T", "I", "G", "E", "R"], [], [0])}
 						<br />
-						<p>The letter E is in the word but in the wrong spot.</p>
+						<p>The letter T is in the word but in the wrong spot.</p>
 						{buildExampleWordRow(2, ["B", "E", "A", "R", "S"], [], [])}
 						<br />
 						<p>None of the letters in BEARS exist in the word in any spot.</p>
