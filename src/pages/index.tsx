@@ -2,7 +2,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import React from "react";
 import WriteLog from "../data/RemoteLogManager";
-import { SettingsContext } from "../contexts/SettingsContext";
+import { validateSettingsCookie } from "../contexts/SettingsContext";
 import {
 	BulkUpdateDocuments,
 	LoadRandomWordFromDatabase,
@@ -11,7 +11,6 @@ import {
 import GameConstants from "../game/constants/GameConstants";
 import { TestWord_Deice } from "../game/constants/TestWords";
 import { Game } from "../game/Game";
-import ISettings from "../game/interfaces/ISettings";
 import IWord from "../game/interfaces/IWord";
 import Router, { useRouter } from "next/router";
 import Cookies from 'universal-cookie';
@@ -51,41 +50,13 @@ function Index({ winningWord }: InferGetServerSidePropsType<typeof getServerSide
 	 * Watches for changes in the cookies and refreshes the game when the settings change.
 	 */
 	const handleSettingsCookieChanged = () => {
-		var gameSettingsCookie = cookies.get(GameConstants.SettingsCookieName);
-
-		if (gameSettingsCookie && gameSettingsCookie.wordLength) {
-			// Check for any funny business and correct it if we find it.
-			if (gameSettingsCookie.wordLength < GameConstants.MinGuessLetters || gameSettingsCookie.wordLength > GameConstants.MaxGuessLetters) {
-				console.log("Invalid settings detected. Falling back to default settings.", gameSettingsCookie);
-				cookies.set(GameConstants.SettingsCookieName, getUpdatedSettingsObjectForCookie(GameConstants.DefaultGuessLetters));
-				return;
-			}
-
+		if (validateSettingsCookie()) {
+			// Only proceed to reloading the game with the new settings if everything checked out.
 			router.replace(router.asPath);
 		}
 	}
 
 	cookies.addChangeListener(handleSettingsCookieChanged);
-
-	const [wordLength, setWordLength] = React.useState(GameConstants.DefaultGuessLetters);
-
-	const handleWordLengthChange = (newWordLength: number) => {
-		setWordLength(newWordLength);
-
-		// Update the settings in the cookie.
-		cookies.set(GameConstants.SettingsCookieName, JSON.stringify(getUpdatedSettingsObjectForCookie(newWordLength)));
-	}
-
-	const getUpdatedSettingsObjectForCookie = (newWordLength: number): ISettings => {
-		return {
-			wordLength: newWordLength
-		};
-	}
-
-	const settingsContextValue = {
-		globalWordLength: wordLength,
-		setGlobalWordLength: handleWordLengthChange
-	};
 
 	return (
 		<div>
@@ -103,9 +74,7 @@ function Index({ winningWord }: InferGetServerSidePropsType<typeof getServerSide
 			<main className="main">
 				<noscript>You need to enable JavaScript to run this app.</noscript>
 				<LoadingOverlay isLoading={loading} />
-				<SettingsContext.Provider value={settingsContextValue}>
-					<Game winningWord={winningWord} />
-				</SettingsContext.Provider>
+				<Game winningWord={winningWord} />
 			</main>
 		</div>
 	);
@@ -116,26 +85,40 @@ function Index({ winningWord }: InferGetServerSidePropsType<typeof getServerSide
  * @returns
  */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-	// Default to loading the hardcoded default number of letters per guess word, but check
-	// to see whether the user has selected a different length in the settings by reading
-	// the "gameSettings" cookie.
+	// Default to loading the hardcoded default word frequency and number of letters per
+	// guess word, but check to see whether the user has selected a different option in
+	// the settings by reading the "gameSettings" cookie.
 	var wordLengthToLoad = GameConstants.DefaultGuessLetters;
+	var wordMinFrequencyToLoad = GameConstants.DefaultMinWordFrequency;
 	const settingsCookieName = GameConstants.SettingsCookieName;
 
 	if (context.req.cookies && context.req.cookies[settingsCookieName]) {
 		var rawCookie = context.req.cookies[settingsCookieName];
 		var gameSettings = rawCookie ? JSON.parse(rawCookie) : undefined;
-		var wordLengthFromSettings = gameSettings && gameSettings.wordLength ? parseInt(gameSettings.wordLength) : -1;
+		var wordLengthFromSettings =
+			gameSettings && gameSettings.wordLength
+				? parseInt(gameSettings.wordLength)
+				: -1;
 
 		// If the user has chosen a different word length to play with, use that instead.
 		if (wordLengthFromSettings > 0) {
 			wordLengthToLoad = wordLengthFromSettings;
 		}
+
+		var wordMinFrequencyFromSettings =
+			gameSettings && gameSettings.wordMinFrequency
+				? parseFloat(gameSettings.wordMinFrequency)
+				: -1;
+
+		// Same for the word frequency.
+		if (wordMinFrequencyFromSettings > 0) {
+			wordMinFrequencyToLoad = wordMinFrequencyFromSettings;
+		}
 	}
 
 	const isDebugMode = process.env.IS_DEBUG_MODE == "true";
 	const shouldLoadDebugFromRemote = process.env.LOAD_DEBUG_FROM_REMOTE_DB == "true";
-	
+
 	const requestHeaderOptions = {
 		method: "GET",
 		headers: {
@@ -147,7 +130,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 	WriteLog("index.getServerSideProps", {
 		isDebugMode: isDebugMode,
 		shouldLoadDebugFromRemote: shouldLoadDebugFromRemote,
-		wordLengthToLoad: wordLengthToLoad
+		wordLengthToLoad: wordLengthToLoad,
+		wordMinFrequencyToLoad: wordMinFrequencyToLoad
 	});
 
 	var winningWord: IWord;
@@ -175,7 +159,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 			letterPattern: "^[a-z]*$",
 			letters: wordLengthToLoad,
 			hasDetails: "definitions,synonyms,antonyms",
-			syllablesMin: 1
+			syllablesMin: 1,
+			frequencymin: wordMinFrequencyToLoad
 		};
 
 		var encodedQueryKeyValuePairs: string[] = [];

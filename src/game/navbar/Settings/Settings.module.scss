@@ -1,3 +1,24 @@
+.settingBlock {
+    margin-bottom: 2em;
+
+    h6 {
+        margin-bottom: 0;
+    }
+
+    .settingDescription {
+        margin-bottom: 0.5em;
+    }
+}
+
+.frequencyOptionButton {
+    font-size: x-small;
+    max-width: min-content;
+
+    &:not(:first-child) {
+        border-left: 1px solid #51585e;
+    }
+}
+
 .saveButtonBlock {
     text-align: right;
     margin-top: 20px;

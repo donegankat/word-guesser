@@ -95,93 +95,99 @@ export default function MainNavbar(props: IMainNavbarProps) {
     };
 
     return (
-        <>
-            <Navbar bg="dark" variant="dark" key="main-navbar" expand={false} className="mb-3 px-2">
-                <Container fluid className="p-0 px-sm-2">
-                    <Nav className="flex-row justify-content-start flex-grow-1">
-                        <Nav.Item aria-controls={'offcanvasNavbar-expand-hints'}>
-                            <Button
-                                variant="outline-secondary"
-                                className={`me-1 ${styles.navbarToggler}`}
-                                title="Hints"
-                                onClick={handleHintsMenuShow}
-                            >
-                                <i className="bi bi-lightbulb"></i>
-                            </Button>
-                        </Nav.Item>
-                        <Nav.Item aria-controls={'offcanvasNavbar-expand-hints'}>
-                            <Button
-                                variant="outline-secondary"
-                                className={`me-1 ${styles.navbarToggler}`}
-                                type="reset"
-                                title="New Game"
-                                onClick={handleNewGameButtonClick}
-                            >
-                                <i className="bi bi-plus-circle"></i>
-                            </Button>
-                        </Nav.Item>
-                    </Nav>
-                    <Navbar.Brand href="#" className="me-0 py-0">
-                        Word{' '}
-                        <Image
-                            alt="Word Guesser Logo"
-                            src="/logo192.png"
-                            width="30"
-                            height="30"
-                            className="align-text-bottom"
-                            />
-                        {' '}Guesser
-                    </Navbar.Brand>
-                    <Nav className="flex-row justify-content-end flex-grow-1">
-                        <Nav.Item aria-controls={'offcanvasNavbar-expand-how-to-play'}>
-                            <Button
-                                variant="outline-secondary"
-                                className={`me-1 ${styles.navbarToggler}`}
-                                title="How To Play"
-                                onClick={handleHelpMenuShow}
-                            >
-                                <i className="bi bi-question-circle"></i>
-                            </Button>
-                        </Nav.Item>
-                        <Nav.Item aria-controls={'offcanvasNavbar-expand-settings'}>
-                            <Button
-                                variant="outline-secondary"
-                                className={`me-0 ${styles.navbarToggler}`}
-                                title="Settings"
-                                onClick={handleSettingsMenuShow}
-                            >
-                                <i className="bi bi-gear"></i>
-                            </Button>
-                        </Nav.Item>
-                    </Nav>
-                </Container>
-            </Navbar>
-            <HowToPlayMenu
-                isShown={showHelpMenu}
-                onShow={handleHelpMenuShow}
-                onHide={handleHelpMenuClose}
-            />
-            <SettingsMenu
-                isShown={showSettingsMenu}
-                onShow={handleSettingsMenuShow}
-                onHide={handleSettingsMenuClose}
-                setFocusOnGameBoard={props.setFocusOnGameBoard}
-                loseFocusOnGameBoard={props.loseFocusOnGameBoard}
-                onConfirmResetGame={handleResetGame}
-            />
-            <HintsMenu
-                isShown={showHintsMenu}
-                word={props.word}
-                hints={props.hints}
-                onShow={handleHintsMenuShow}
-                onHide={handleHintsMenuClose}
-            />
-            <ResetGameConfirmationModal
-                isShown={showNewGameConfirmationModal}
-                onShow={handleShowNewGameConfirmationModal}
-                onHide={handleCloseNewGameConfirmationModal}
-                onConfirmResetGame={handleResetGame}
-            />
-        </>
-    )
+			<>
+				<Navbar
+					bg="dark"
+					variant="dark"
+					key="main-navbar"
+					expand={false}
+					className="mb-3 px-2"
+				>
+					<Container fluid className="p-0 px-sm-2">
+						<Nav className="flex-row justify-content-start flex-grow-1">
+							<Nav.Item aria-controls={"offcanvasNavbar-expand-hints"}>
+								<Button
+									variant="outline-light"
+									className={`me-1 ${styles.navbarToggler}`}
+									title="Hints"
+									onClick={handleHintsMenuShow}
+								>
+									<i className="bi bi-lightbulb"></i>
+								</Button>
+							</Nav.Item>
+							<Nav.Item aria-controls={"offcanvasNavbar-expand-hints"}>
+								<Button
+									variant="outline-light"
+									className={`me-1 ${styles.navbarToggler}`}
+									type="reset"
+									title="New Game"
+									onClick={handleNewGameButtonClick}
+								>
+									<i className="bi bi-plus-circle"></i>
+								</Button>
+							</Nav.Item>
+						</Nav>
+						<Navbar.Brand href="#" className="me-0 py-0">
+							Word{" "}
+							<Image
+								alt="Word Guesser Logo"
+								src="/logo192.png"
+								width="30"
+								height="30"
+								className="align-text-bottom"
+							/>{" "}
+							Guesser
+						</Navbar.Brand>
+						<Nav className="flex-row justify-content-end flex-grow-1">
+							<Nav.Item aria-controls={"offcanvasNavbar-expand-how-to-play"}>
+								<Button
+									variant="outline-light"
+									className={`me-1 ${styles.navbarToggler}`}
+									title="How To Play"
+									onClick={handleHelpMenuShow}
+								>
+									<i className="bi bi-question-circle"></i>
+								</Button>
+							</Nav.Item>
+							<Nav.Item aria-controls={"offcanvasNavbar-expand-settings"}>
+								<Button
+									variant="outline-light"
+									className={`me-0 ${styles.navbarToggler}`}
+									title="Settings"
+									onClick={handleSettingsMenuShow}
+								>
+									<i className="bi bi-gear"></i>
+								</Button>
+							</Nav.Item>
+						</Nav>
+					</Container>
+				</Navbar>
+				<HowToPlayMenu
+					isShown={showHelpMenu}
+					onShow={handleHelpMenuShow}
+					onHide={handleHelpMenuClose}
+				/>
+				<SettingsMenu
+					isShown={showSettingsMenu}
+					onShow={handleSettingsMenuShow}
+					onHide={handleSettingsMenuClose}
+					setFocusOnGameBoard={props.setFocusOnGameBoard}
+					loseFocusOnGameBoard={props.loseFocusOnGameBoard}
+					onConfirmResetGame={handleResetGame}
+				/>
+				<HintsMenu
+					isShown={showHintsMenu}
+					word={props.word}
+					hints={props.hints}
+					onShow={handleHintsMenuShow}
+					onHide={handleHintsMenuClose}
+				/>
+				<ResetGameConfirmationModal
+					isShown={showNewGameConfirmationModal}
+					onShow={handleShowNewGameConfirmationModal}
+					onHide={handleCloseNewGameConfirmationModal}
+					onConfirmResetGame={handleResetGame}
+				/>
+			</>
+		);
 }
